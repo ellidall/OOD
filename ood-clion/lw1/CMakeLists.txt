@@ -4,6 +4,7 @@ project(lw1)
 set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(SimUDuck)
+add_subdirectory(FunctionalSimUDuck)
 
 include(FetchContent)
 FetchContent_Declare(

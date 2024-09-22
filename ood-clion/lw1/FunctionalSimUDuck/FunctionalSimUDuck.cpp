@@ -3,8 +3,18 @@
 #include "Ducks/ModelDuck.h"
 #include "Ducks/RedheadDuck.h"
 #include "Ducks/RubberDuck.h"
-#include "DuckFunctions.h"
 #include <cstdlib>
+
+void PlayWithDuck(Duck& duck)
+{
+    std::cout << "---------------" << std::endl;
+    duck.Display();
+    duck.Swim();
+    duck.Quack();
+    duck.Fly();
+    duck.Dance();
+    std::cout << "---------------" << std::endl	<< std::endl;
+}
 
 int main()
 {	

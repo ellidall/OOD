@@ -9,7 +9,6 @@
 #include "../SimUDuck/DanceStrategy/MinuetDance.h"
 #include "../SimUDuck/DanceStrategy/WaltzDance.h"
 #include "../SimUDuck/Duck.h"
-#include "../SimUDuck/Exception/ActionCannotBeNullException.h"
 #include <memory>
 
 class MockFlyBehavior : public IFlyBehavior
