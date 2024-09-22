@@ -10,7 +10,6 @@
 #include <iostream>
 #include <memory>
 
-
 class Duck
 {
 public:
