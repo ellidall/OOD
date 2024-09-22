@@ -9,7 +9,6 @@
 #include <cassert>
 #include <iostream>
 #include <memory>
-#include <vector>
 
 class Duck
 {
