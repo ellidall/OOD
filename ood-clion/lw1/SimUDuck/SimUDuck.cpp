@@ -21,6 +21,9 @@ int main()
 		PlayWithDuck(rubberDuck);
 		PlayWithDuck(decoyDuck);
 		PlayWithDuck(modelDuck);
+
+        std::cout << mallardDuck.GetFlightCount() << std::endl;
+        std::cout << decoyDuck.GetFlightCount() << std::endl;
 	}
 	catch (const std::exception& e)
 	{

@@ -32,7 +32,7 @@ public:
 		m_quackBehavior->Quack();
 	}
 
-	void Swim() const
+	static void Swim()
 	{
 		std::cout << "I'm swimming" << std::endl;
 	}
@@ -40,10 +40,10 @@ public:
 	void Fly()
 	{
         m_flyBehavior->Fly();
-		if (dynamic_cast<FlyNoWay*>(m_flyBehavior.get()) == nullptr)
+		if (m_flyBehavior->CanFly())
 		{
-            m_flightCount++;
-			if (m_flightCount != 0 && m_flightCount % 2 == 0 && dynamic_cast<MuteQuackBehavior*>(m_quackBehavior.get()) == nullptr)
+            int flightCount = m_flyBehavior->GetFlightCount();
+			if (flightCount != 0 && flightCount % 2 == 0 && !m_quackBehavior->IsMute())
 			{
 				m_quackBehavior->Quack();
 			}
@@ -61,7 +61,6 @@ public:
 		{
 			throw ActionCannotBeNullException();
 		}
-		m_flightCount = 0;
 		m_flyBehavior = std::move(flyBehavior);
 	}
 
@@ -83,14 +82,13 @@ public:
 		m_danceBehavior = std::move(danceBehavior);
 	}
 
-	[[nodiscard]] int GetFlightCount() const
-	{
-		return m_flightCount;
-	}
+    [[nodiscard]] int GetFlightCount() const
+    {
+        return m_flyBehavior->GetFlightCount();
+    }
 
 private:
 	std::unique_ptr<IFlyBehavior> m_flyBehavior;
 	std::unique_ptr<IQuackBehavior> m_quackBehavior;
 	std::unique_ptr<IDanceBehavior> m_danceBehavior;
-	int m_flightCount = 0;
 };

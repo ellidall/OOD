@@ -11,7 +11,7 @@ void PlayWithDuck(Duck& duck)
 {
 	std::cout << "---------------" << std::endl;
 	DrawDuck(duck);
-	duck.Swim();
+    Duck::Swim();
 	duck.Quack();
 	duck.Fly();
 	duck.Dance();

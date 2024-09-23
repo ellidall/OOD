@@ -11,13 +11,14 @@
 #include "../SimUDuck/Duck.h"
 #include <memory>
 
-class MockFlyBehavior : public IFlyBehavior
+class MockQuackBehavior : public IQuackBehavior
 {
 public:
-    MOCK_METHOD(void, Fly, (), (override));
+    MockQuackBehavior() : IQuackBehavior(false){}
+    MOCK_METHOD(void, Quack, (), (override));
 };
 
-class MockQuackBehavior : public IQuackBehavior
+class MockMuteQuackBehavior : public MuteQuackBehavior
 {
 public:
     MOCK_METHOD(void, Quack, (), (override));
@@ -27,6 +28,42 @@ class MockDanceBehavior : public IDanceBehavior
 {
 public:
     MOCK_METHOD(void, Dance, (), (override));
+};
+
+class MockFlyNoWay : public FlyNoWay
+{
+public:
+    MockFlyNoWay() {
+        ON_CALL(*this, Fly()).WillByDefault(testing::Invoke(this, &MockFlyNoWay::RealFly));
+    }
+
+    MOCK_METHOD(void, Fly, (), (override));
+
+    void RealFly() {
+        std::streambuf* originalOutBuffer = std::cout.rdbuf();
+        std::ostringstream oss;
+        std::cout.rdbuf(oss.rdbuf());
+        FlyNoWay::Fly();
+        std::cout.rdbuf(originalOutBuffer);
+    }
+};
+
+class MockFlyWithWings : public FlyWithWings
+{
+public:
+    MockFlyWithWings() {
+        ON_CALL(*this, Fly()).WillByDefault(testing::Invoke(this, &MockFlyWithWings::RealFly));
+    }
+
+    MOCK_METHOD(void, Fly, (), (override));
+
+    void RealFly() {
+        std::streambuf* originalOutBuffer = std::cout.rdbuf();
+        std::ostringstream oss;
+        std::cout.rdbuf(oss.rdbuf());
+        FlyWithWings::Fly();
+        std::cout.rdbuf(originalOutBuffer);
+    }
 };
 
 class MockDuck : public Duck
@@ -49,11 +86,11 @@ public:
 
 TEST(DuckTest, QuackAfterSecondFlight)
 {
-    auto mockFly = std::make_unique<MockFlyBehavior>();
+    auto mockFly = std::make_unique<MockFlyWithWings>();
     auto mockQuack = std::make_unique<MockQuackBehavior>();
     auto mockDance = std::make_unique<MockDanceBehavior>();
 
-    MockFlyBehavior* flyPtr = mockFly.get();
+    MockFlyWithWings* flyPtr = mockFly.get();
     MockQuackBehavior* quackPtr = mockQuack.get();
 
     MockDuck duck(std::move(mockFly), std::move(mockQuack), std::move(mockDance));
@@ -65,19 +102,13 @@ TEST(DuckTest, QuackAfterSecondFlight)
     duck.Fly();
 }
 
-class MockMuteQuackBehavior : public MuteQuackBehavior
-{
-public:
-    MOCK_METHOD(void, Quack, (), (override));
-};
-
 TEST(DuckTest, CannotQuack)
 {
-    auto mockFly = std::make_unique<MockFlyBehavior>();
+    auto mockFly = std::make_unique<MockFlyWithWings>();
     auto mockDance = std::make_unique<MockDanceBehavior>();
     auto mockMuteQuack = std::make_unique<MockMuteQuackBehavior>();
 
-    MockFlyBehavior* flyPtr = mockFly.get();
+    MockFlyWithWings* flyPtr = mockFly.get();
     MockMuteQuackBehavior* muteQuackPtr = mockMuteQuack.get();
 
     MockDuck duck(std::move(mockFly), std::move(mockMuteQuack), std::move(mockDance));
@@ -90,18 +121,6 @@ TEST(DuckTest, CannotQuack)
     duck.Fly();
     duck.Fly();
 }
-
-class MockFlyNoWay : public FlyNoWay
-{
-public:
-    MOCK_METHOD(void, Fly, (), (override));
-};
-
-class MockFlyWithWings : public FlyWithWings
-{
-public:
-    MOCK_METHOD(void, Fly, (), (override));
-};
 
 TEST(DuckTest, CannotFly)
 {
@@ -131,14 +150,15 @@ TEST(DuckTest, FlightsCount)
             std::make_unique<MockDanceBehavior>()
     );
 
-
     duck.Fly();
     duck.Fly();
+    std::cout << "FlightCount: " << duck.GetFlightCount() << std::endl;
     EXPECT_TRUE(duck.GetFlightCount() == 0);
 
     duck.SetFlyBehavior(std::make_unique<MockFlyWithWings>());
     duck.Fly();
     duck.Fly();
+    std::cout << "FlightCount: " << duck.GetFlightCount() << std::endl;
     EXPECT_TRUE(duck.GetFlightCount() == 2);
 }
 
