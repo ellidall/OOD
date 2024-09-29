@@ -5,7 +5,7 @@
 #include "Ducks/RubberDuck.h"
 #include <cstdlib>
 
-void PlayWithDuck(Duck& duck)
+void PlayWithDuck(Duck &duck)
 {
     std::cout << "---------------" << std::endl;
     duck.Display();
@@ -13,29 +13,41 @@ void PlayWithDuck(Duck& duck)
     duck.Quack();
     duck.Fly();
     duck.Dance();
-    std::cout << "---------------" << std::endl	<< std::endl;
+    std::cout << "---------------" << std::endl << std::endl;
 }
 
 int main()
-{	
-	try
-	{
-		MallardDuck mallardDuck;
-		DecoyDuck decoyDuck;
-		RedheadDuck redheadDuck;
-		RubberDuck rubberDuck;
-		ModelDuck modelDuck;
+{
+    try
+    {
+        MallardDuck mallardDuck;
+        DecoyDuck decoyDuck;
+//		RedheadDuck redheadDuck;
+//		RubberDuck rubberDuck;
+//		ModelDuck modelDuck;
+//
+//		PlayWithDuck(mallardDuck);
+//		PlayWithDuck(redheadDuck);
+//		PlayWithDuck(rubberDuck);
+//		PlayWithDuck(decoyDuck);
+//		PlayWithDuck(modelDuck);
 
-		PlayWithDuck(mallardDuck);
-		PlayWithDuck(redheadDuck);
-		PlayWithDuck(rubberDuck);
-		PlayWithDuck(decoyDuck);
-		PlayWithDuck(modelDuck);
-	}
-	catch (const std::exception& e)
-	{
-		std::cout << e.what() << std::endl;
-	}
+        mallardDuck.Fly();
+        mallardDuck.Fly();
+        mallardDuck.SetFlyBehavior(FlyNoWay());
+        mallardDuck.Fly();
+        mallardDuck.Fly();
+        mallardDuck.SetFlyBehavior(FlyWithWings());
+        mallardDuck.Fly();
+        mallardDuck.Fly();
 
-	return EXIT_SUCCESS;
+        decoyDuck.Fly();
+        decoyDuck.Fly();
+    }
+    catch (const std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+
+    return EXIT_SUCCESS;
 }

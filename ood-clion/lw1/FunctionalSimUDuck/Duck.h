@@ -2,67 +2,79 @@
 
 #include <iostream>
 #include <functional>
+#include "Strategies/FlyBehavior.h"
+#include "Strategies/QuackBehavior.h"
+
+using FlyBehavior = std::function<int()>;
+using QuackBehavior = std::function<void()>;
+using DanceBehavior = std::function<void()>;
 
 class Duck
 {
 public:
-	Duck(
-        std::function<void()> flyBehavior,
-        std::function<void()> quackBehavior,
-        std::function<void()> danceBehavior
-	): m_flyBehavior(std::move(flyBehavior)),
-       m_quackBehavior(std::move(quackBehavior)),
-       m_danceBehavior(std::move(danceBehavior)),
-       m_flightCount(0)
+    Duck(
+            FlyBehavior flyBehavior,
+            QuackBehavior quackBehavior,
+            DanceBehavior danceBehavior
+    ) : m_flyBehavior(std::move(flyBehavior)),
+        m_quackBehavior(std::move(quackBehavior)),
+        m_danceBehavior(std::move(danceBehavior))
     {}
 
-	virtual ~Duck() = default;
-	virtual void Display() const = 0;
+    virtual ~Duck() = default;
 
-	void Quack() const
-	{
-		m_quackBehavior();
-	}
+    virtual void Display() const = 0;
 
-	void Swim() const
-	{
-		std::cout << "I'm swimming" << std::endl;
-	}
+    void Quack()
+    {
+        m_quackBehavior();
+    }
 
-	void Fly()
-	{
-        m_flyBehavior();
-        m_flightCount++;
-	}
+    void Swim()
+    {
+        std::cout << "I'm swimming" << std::endl;
+    }
 
-	void Dance() const
-	{
-		m_danceBehavior();
-	}
+    void Fly()
+    {
+        const int flightCount = m_flyBehavior();
+        if (flightCount != 0 && flightCount % 2 == 0)
+        {
+            m_quackBehavior();
+        }
+//        m_flyBehavior.Fly();
+//        if (m_flyBehavior.CanFly())
+//        {
+//            int flightCount = m_flyBehavior.GetFlightCount();
+//            if (flightCount != 0 && flightCount % 2 == 0 && !m_quackBehavior.IsMute())
+//            {
+//                m_quackBehavior.Quack();
+//            }
+//        }
+    }
 
-    void SetFlyBehavior(std::function<void()> flyFunction)
+    void Dance()
+    {
+        m_danceBehavior();
+    }
+
+    void SetFlyBehavior(FlyBehavior flyFunction)
     {
         m_flyBehavior = std::move(flyFunction);
     }
 
-    void SetDanceBehavior(std::function<void()> danceFunction)
+    void SetDanceBehavior(DanceBehavior danceFunction)
     {
-        m_quackBehavior = std::move(danceFunction);
+        m_danceBehavior = std::move(danceFunction);
     }
 
-    void SetQuackBehavior(std::function<void()> quackFunction)
+    void SetQuackBehavior(QuackBehavior quackFunction)
     {
-        m_danceBehavior = std::move(quackFunction);
+        m_quackBehavior = std::move(quackFunction);
     }
-
-	[[nodiscard]] int GetFlightCount() const
-	{
-		return m_flightCount;
-	}
 
 private:
-    std::function<void()> m_flyBehavior;
-    std::function<void()> m_quackBehavior;
-    std::function<void()> m_danceBehavior;
-    int m_flightCount = 0;
+    FlyBehavior m_flyBehavior;
+    QuackBehavior m_quackBehavior;
+    DanceBehavior m_danceBehavior;
 };

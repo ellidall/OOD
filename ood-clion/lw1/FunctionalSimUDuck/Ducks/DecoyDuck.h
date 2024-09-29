@@ -9,14 +9,15 @@
 class DecoyDuck : public Duck
 {
 public:
-	DecoyDuck() : Duck(
-        [](){FlyNoWay();},
-        [](){MuteQuack();},
-        [](){NoDance();}
-    ){}
+    DecoyDuck() : Duck(
+            FlyNoWay(),
+            MuteQuack(),
+            NoDance()
+    )
+    {}
 
-	void Display() const override
-	{
-		std::cout << "I'm decoy duck" << std::endl;
-	}
+    void Display() const override
+    {
+        std::cout << "I'm decoy duck" << std::endl;
+    }
 };

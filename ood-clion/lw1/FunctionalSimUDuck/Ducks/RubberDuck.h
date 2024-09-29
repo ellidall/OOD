@@ -10,13 +10,14 @@ class RubberDuck : public Duck
 {
 public:
     RubberDuck() : Duck(
-            [](){FlyNoWay();},
-            [](){Squeak();},
-            [](){NoDance();}
-    ){}
+            FlyNoWay(),
+            Squeak(),
+            NoDance()
+    )
+    {}
 
-	void Display() const override
-	{
-		std::cout << "I'm rubber duck" << std::endl;
-	}
+    void Display() const override
+    {
+        std::cout << "I'm rubber duck" << std::endl;
+    }
 };

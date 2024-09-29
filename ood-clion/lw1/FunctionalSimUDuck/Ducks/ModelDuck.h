@@ -10,13 +10,14 @@ class ModelDuck : public Duck
 {
 public:
     ModelDuck() : Duck(
-        [](){FlyNoWay();},
-        [](){SimpleQuack();},
-        [](){NoDance();}
-    ){}
+            FlyNoWay(),
+            SimpleQuack(),
+            NoDance()
+    )
+    {}
 
-	void Display() const override
-	{
-		std::cout << "I'm model duck" << std::endl;
-	}
+    void Display() const override
+    {
+        std::cout << "I'm model duck" << std::endl;
+    }
 };

@@ -1,18 +1,25 @@
 #pragma once
 
 #include <iostream>
+#include <functional>
 
-void MinuetDance()
+std::function<void()> MinuetDance()
 {
-    std::cout << "I'm dance minuet!" << std::endl;
+    return []() {
+        std::cout << "I'm dance minuet!" << std::endl;
+    };
 }
 
-void NoDance()
+std::function<void()> NoDance()
 {
-    std::cout << "I can't dance :(" << std::endl;
+    return []() {
+        std::cout << "I can't dance :(" << std::endl;
+    };
 }
 
-void WaltzDance()
+std::function<void()> WaltzDance()
 {
-    std::cout << "I'm dance waltz!" << std::endl;
+    return []() {
+        std::cout << "I'm dance waltz!" << std::endl;
+    };
 }

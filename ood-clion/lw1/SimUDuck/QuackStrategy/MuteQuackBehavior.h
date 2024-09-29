@@ -6,11 +6,11 @@
 class MuteQuackBehavior : public IQuackBehavior
 {
 public:
-    MuteQuackBehavior() : IQuackBehavior(true)
-    {}
+    MuteQuackBehavior() : IQuackBehavior()
+    {
+    }
 
     void Quack() override
     {
-        std::cout << "I am in MUTE" << std::endl;
     }
 };

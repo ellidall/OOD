@@ -6,11 +6,12 @@
 class SqueakBehavior : public IQuackBehavior
 {
 public:
-    SqueakBehavior() : IQuackBehavior(false)
-    {}
+    SqueakBehavior() : IQuackBehavior()
+    {
+    }
 
-	void Quack() override
-	{
-		std::cout << "Squeek!!!" << std::endl;
-	}
+    void Quack() override
+    {
+        std::cout << "Squeek!!!" << std::endl;
+    }
 };

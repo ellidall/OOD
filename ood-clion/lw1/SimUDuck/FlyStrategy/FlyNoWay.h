@@ -6,10 +6,22 @@
 class FlyNoWay : public IFlyBehavior
 {
 public:
-    FlyNoWay() : IFlyBehavior(false) {}
+    FlyNoWay() : IFlyBehavior()
+    {
+    }
 
     void Fly() override
     {
         std::cout << "I can't fly" << std::endl;
+    }
+
+    [[nodiscard]] int GetFlightCount() const override
+    {
+        return 0;
+    }
+
+    [[nodiscard]] bool CanFly() const override
+    {
+        return false;
     }
 };

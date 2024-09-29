@@ -6,8 +6,9 @@
 class QuackBehavior : public IQuackBehavior
 {
 public:
-    QuackBehavior() : IQuackBehavior(false)
-    {}
+    QuackBehavior() : IQuackBehavior()
+    {
+    }
 
 	void Quack() override
 	{

@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "../SimUDuck/FlyStrategy/IFlyBehavior.h"
-#include "../SimUDuck/QuackStrategy/IQuackBehavior.h"
 #include "../SimUDuck/QuackStrategy/MuteQuackBehavior.h"
+#include "../SimUDuck/QuackStrategy/QuackBehavior.h"
 #include "../SimUDuck/FlyStrategy/FlyNoWay.h"
 #include "../SimUDuck/FlyStrategy/FlyWithWings.h"
 #include "../SimUDuck/DanceStrategy/NoDance.h."
@@ -11,10 +11,9 @@
 #include "../SimUDuck/Duck.h"
 #include <memory>
 
-class MockQuackBehavior : public IQuackBehavior
+class MockQuackBehavior : public QuackBehavior
 {
 public:
-    MockQuackBehavior() : IQuackBehavior(false){}
     MOCK_METHOD(void, Quack, (), (override));
 };
 
@@ -98,26 +97,6 @@ TEST(DuckTest, QuackAfterSecondFlight)
     EXPECT_CALL(*flyPtr, Fly()).Times(2);
     EXPECT_CALL(*quackPtr, Quack()).Times(1);
 
-    duck.Fly();
-    duck.Fly();
-}
-
-TEST(DuckTest, CannotQuack)
-{
-    auto mockFly = std::make_unique<MockFlyWithWings>();
-    auto mockDance = std::make_unique<MockDanceBehavior>();
-    auto mockMuteQuack = std::make_unique<MockMuteQuackBehavior>();
-
-    MockFlyWithWings* flyPtr = mockFly.get();
-    MockMuteQuackBehavior* muteQuackPtr = mockMuteQuack.get();
-
-    MockDuck duck(std::move(mockFly), std::move(mockMuteQuack), std::move(mockDance));
-
-    EXPECT_CALL(*flyPtr, Fly()).Times(4);
-    EXPECT_CALL(*muteQuackPtr, Quack()).Times(0);
-
-    duck.Fly();
-    duck.Fly();
     duck.Fly();
     duck.Fly();
 }

@@ -1,18 +1,68 @@
 #pragma once
 
 #include <iostream>
+#include <functional>
 
-void MuteQuack()
+//struct QuackBehavior
+//{
+//    std::function<void()> Quack;
+//    std::function<bool()> IsMute;
+//};
+//
+//std::function<QuackBehavior()> MuteQuack()
+//{
+//    const bool isMute = true;
+//
+//    QuackBehavior quackBehavior;
+//    quackBehavior.Quack = []() {
+//        std::cout << "I am in MUTE" << std::endl;
+//    };
+//    quackBehavior.IsMute = []() { return isMute; };
+//
+//    return [quackBehavior]() { return quackBehavior; };
+//}
+//
+//std::function<QuackBehavior()> Squeak()
+//{
+//    const bool isMute = false;
+//
+//    QuackBehavior quackBehavior;
+//    quackBehavior.Quack = []() {
+//        std::cout << "Squeek!!!" << std::endl;
+//    };
+//    quackBehavior.IsMute = []() { return isMute; };
+//
+//    return [quackBehavior]() { return quackBehavior; };
+//}
+//
+//std::function<QuackBehavior()> SimpleQuack()
+//{
+//    const bool isMute = false;
+//
+//    QuackBehavior quackBehavior;
+//    quackBehavior.Quack = []() {
+//        std::cout << "Quack Quack!!!" << std::endl;
+//    };
+//    quackBehavior.IsMute = []() { return isMute; };
+//
+//    return [quackBehavior]() { return quackBehavior; };
+//}
+
+std::function<void()> SimpleQuack()
 {
-    std::cout << "I am in MUTE" << std::endl;
+    return []() {
+        std::cout << "Quack Quack!!!" << std::endl;
+    };
 }
 
-void SimpleQuack()
+std::function<void()> Squeak()
 {
-    std::cout << "Quack Quack!!!" << std::endl;
+    return []() {
+        std::cout << "Squeek!!!" << std::endl;
+    };
 }
 
-void Squeak()
+std::function<void()> MuteQuack()
 {
-    std::cout << "Squeek!!!" << std::endl;
+    return []() {};
 }

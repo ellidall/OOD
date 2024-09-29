@@ -27,12 +27,12 @@ public:
 	virtual ~Duck() = default;
 	virtual void Display() const = 0;
 
-	void Quack() const
+	void Quack()
 	{
 		m_quackBehavior->Quack();
 	}
 
-	static void Swim()
+	void Swim()
 	{
 		std::cout << "I'm swimming" << std::endl;
 	}
@@ -43,14 +43,14 @@ public:
 		if (m_flyBehavior->CanFly())
 		{
             int flightCount = m_flyBehavior->GetFlightCount();
-			if (flightCount != 0 && flightCount % 2 == 0 && !m_quackBehavior->IsMute())
+			if (flightCount != 0 && flightCount % 2 == 0)
 			{
 				m_quackBehavior->Quack();
 			}
 		}
 	}
 
-	void Dance() const
+	void Dance()
 	{
 		m_danceBehavior->Dance();
 	}

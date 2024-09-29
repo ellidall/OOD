@@ -3,28 +3,56 @@
 #include <iostream>
 #include <functional>
 
-struct FlyBehavior
-{
-    std::function<void()> FlyWithWings;
-    std::function<int()> GetFlightCount;
-};
+//struct FlyBehavior
+//{
+//    std::function<void()> Fly;
+//    std::function<int()> GetFlightCount;
+//    std::function<bool()> CanFly;
+//    int flightCount = 0;
+//};
+//
+//FlyBehavior FlyWithWings() {
+//    const bool canFly = true;
+//
+//    FlyBehavior flyBehavior;
+//    flyBehavior.Fly = [&flyBehavior]() {
+//        flyBehavior.flightCount++;
+//        std::cout << "I'm flying with wings!!" << std::endl;
+//    };
+//    flyBehavior.GetFlightCount = [&flyBehavior]() { return flyBehavior.flightCount; };
+//    flyBehavior.CanFly = []() { return canFly; };
+//
+//    return flyBehavior;
+//}
+//
+//FlyBehavior FlyNoWay()
+//{
+//    const bool canFly = false;
+//
+//    FlyBehavior flyBehavior;
+//    flyBehavior.Fly = []() {
+//        std::cout << "I can't fly" << std::endl;
+//    };
+//    flyBehavior.GetFlightCount = [&flyBehavior]() { return flyBehavior.flightCount; };
+//    flyBehavior.CanFly = []() { return canFly; };
+//
+//    return flyBehavior;
+//}
 
-FlyBehavior MakeFlyBehavior()
+std::function<int()> FlyWithWings()
 {
-    int flyCount;
-    FlyBehavior flyBehavior;
-
-    flyBehavior.FlyWithWings = [&flyCount]() {
-        flyCount++;
-        std::cout << "I'm flying with wings!!" << std::endl;
+    int flightCount = 0;
+    return [flightCount]() mutable {
+        flightCount++;
+        std::cout << "I'm flying with wings!! FlightCount: " << flightCount << std::endl;
+        return flightCount;
     };
-
-    flyBehavior.GetFlightCount = [&flyCount]() { return flyCount; };
-
-    return  flyBehavior;
 }
 
-void FlyNoWay()
+std::function<int()> FlyNoWay()
 {
-    std::cout << "I can't fly" << std::endl;
+    return []() {
+        std::cout << "I can't fly" << std::endl;
+        return 0;
+    };
 }
