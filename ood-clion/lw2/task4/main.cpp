@@ -4,16 +4,17 @@
 
 int main()
 {
-    WeatherManager weatherManager;
-    CDisplay display;
-    CStatsDisplay statsDisplay;
+    WeatherManager weatherManagerIn;
+    WeatherManager weatherManagerOut;
+    CDisplay display(&weatherManagerIn, &weatherManagerOut);
+    CStatsDisplay statsDisplay(&weatherManagerIn, &weatherManagerOut);
 
-    weatherManager.RegisterObserver(display, 1);
-    weatherManager.RegisterObserver(statsDisplay, 2);
+    weatherManagerIn.RegisterObserver(display, 1);
+    weatherManagerOut.RegisterObserver(display, 2);
 
-    weatherManager.SetMeasurements(100, 0.17, 900);
+    weatherManagerIn.SetMeasurements(100, 0.17, 900);
     std::cout << std::endl << std::endl;
-    weatherManager.SetMeasurements(10, 0.8, 761);
+    weatherManagerOut.SetMeasurements(10, 0.8, 761);
 
     return EXIT_SUCCESS;
 }

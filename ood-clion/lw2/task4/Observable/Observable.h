@@ -5,7 +5,7 @@
 #include "../Observer/IObserver.h"
 #include "IObservable.h"
 
-template<class T>
+template<typename T>
 class Observable : public IObservable<T>
 {
 public:
@@ -36,7 +36,7 @@ public:
     }
 
 protected:
-    void NotifyObservers()
+    void NotifyObservers() override
     {
         T data = GetChangedData();
         auto copyOfObserver = m_priorityToObservers;
@@ -44,7 +44,7 @@ protected:
         {
             for (auto& observer : it->second)
             {
-                observer->Update(data);
+                observer->Update(data, this);
             }
         }
     }

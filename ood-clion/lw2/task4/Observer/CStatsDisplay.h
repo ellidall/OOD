@@ -47,13 +47,31 @@ private:
 
 class CStatsDisplay : public IObserver<WeatherData>
 {
+public:
+    CStatsDisplay(
+            Observable<WeatherData>* m_weatherDataIn,
+            Observable<WeatherData>* m_weatherDataOut
+    ) : m_weatherDataIn(m_weatherDataIn), m_weatherDataOut(m_weatherDataOut)
+    {}
+
 private:
-    void Update(const WeatherData& data) override
+    void Update(const WeatherData& data, const Observable<WeatherData>* observable) override
     {
+        std::string location = "Not Stated";
+        if (observable == m_weatherDataIn)
+        {
+            location = "Inside Weather Station";
+        }
+        else if (observable == m_weatherDataOut)
+        {
+            location = "Outside Weather Station";
+        }
+
         m_statisticsTemperature.Update(data.temperature);
         m_statisticsHumidity.Update(data.humidity);
         m_statisticsPressure.Update(data.pressure);
 
+        std::cout << "Location " << location << std::endl;
         std::cout << "Max Temp " << m_statisticsTemperature.GetMax() << std::endl;
         std::cout << "Min Temp " << m_statisticsTemperature.GetMin() << std::endl;
         std::cout << "Average Temp " << m_statisticsTemperature.GetAverage() << std::endl;
@@ -72,4 +90,7 @@ private:
     Stats m_statisticsTemperature;
     Stats m_statisticsHumidity;
     Stats m_statisticsPressure;
+
+    const Observable<WeatherData>* m_weatherDataIn;
+    const Observable<WeatherData>* m_weatherDataOut;
 };

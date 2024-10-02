@@ -36,7 +36,7 @@ public:
     }
 
 protected:
-    void NotifyObservers()
+    void NotifyObservers() override
     {
         T data = GetChangedData();
         auto copyOfObserver = m_priorityToObservers;

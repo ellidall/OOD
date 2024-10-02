@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 add_subdirectory(task1)
 add_subdirectory(task2)
 add_subdirectory(task3)
+add_subdirectory(task4)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -17,3 +18,4 @@ FetchContent_MakeAvailable(googletest)
 
 add_subdirectory(tests2)
 add_subdirectory(tests3)
+add_subdirectory(tests4)
