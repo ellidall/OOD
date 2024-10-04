@@ -8,6 +8,7 @@ add_subdirectory(task2)
 add_subdirectory(task3)
 add_subdirectory(task4)
 add_subdirectory(task5)
+add_subdirectory(task7)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -20,4 +21,3 @@ FetchContent_MakeAvailable(googletest)
 add_subdirectory(tests2)
 add_subdirectory(tests3)
 add_subdirectory(tests4)
-add_subdirectory(tests5)

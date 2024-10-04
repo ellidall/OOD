@@ -17,20 +17,16 @@ private:
 
     void Update(const WeatherData& data, const IObservable<WeatherData>* observable) override
     {
-        std::string location = "Not Stated";
-        if (observable == m_weatherDataIn)
-        {
-            location = "Inside Weather Station";
-        }
-        else if (observable == m_weatherDataOut)
-        {
-            location = "Outside Weather Station";
-        }
-
-        std::cout << "Location " << location << std::endl;
         std::cout << "Current Temp " << data.temperature << std::endl;
         std::cout << "Current Humidity " << data.humidity << std::endl;
         std::cout << "Current Pressure " << data.pressure << std::endl;
+
+        if (observable == m_weatherDataOut)
+        {
+            std::cout << "Wind Speed " << data.windSpeed << std::endl;
+            std::cout << "Wind Direction " << data.windDirection << std::endl;
+        }
+
         std::cout << "----------------" << std::endl;
     }
 

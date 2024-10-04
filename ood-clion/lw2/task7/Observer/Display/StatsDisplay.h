@@ -4,8 +4,8 @@
 #include <limits>
 #include <algorithm>
 #include <cmath>
-#include "Data/WeatherData.h"
-#include "IObserver.h"
+#include "../Data/WeatherData.h"
+#include "../IObserver.h"
 
 class Stats
 {
@@ -109,68 +109,55 @@ private:
     unsigned m_acc = 0;
 };
 
-class StatsDisplay : public IObserver<WeatherData>
+class StatsDisplay : public IObserver<WeatherData, Event>
 {
-public:
-    StatsDisplay(
-            Observable<WeatherData>* m_weatherDataIn,
-            Observable<WeatherData>* m_weatherDataOut
-    ) : m_weatherDataIn(m_weatherDataIn), m_weatherDataOut(m_weatherDataOut)
-    {}
-
 private:
-    void PrintStats(const Stats& stats)
+    static void PrintStats(const Stats& stats)
     {
-        std::cout << "Max: " << stats.GetMax() << std::endl;
-        std::cout << "Min:" << stats.GetMin() << std::endl;
-        std::cout << "Average:" << stats.GetAverage() << std::endl;
+        std::cout << ">> Max: " << stats.GetMax() << std::endl;
+        std::cout << ">> Min:" << stats.GetMin() << std::endl;
+        std::cout << ">> Average:" << stats.GetAverage() << std::endl;
     }
 
-    void Update(const WeatherData& data, const IObservable<WeatherData>* observable) override
+    void Update(const WeatherData& data, Event event) override
     {
-        m_statisticsTemperature.Update(data.temperature);
-        m_statisticsHumidity.Update(data.humidity);
-        m_statisticsPressure.Update(data.pressure);
-
-        if (observable == m_weatherDataIn)
+        std::cout << "|StatsDisplay|" << std::endl;
+        if (event == Event::Temperature)
         {
-            std::cout << "Location: inside" << std::endl;
-            std::cout << "Temperature" << std::endl;
+            m_statisticsTemperature.Update(data.temperature);
+            std::cout << "> Temperature: " << std::endl;
             PrintStats(m_statisticsTemperature);
-            std::cout << "Humidity" << std::endl;
-            PrintStats(m_statisticsHumidity);
-            std::cout << "Pressure" << std::endl;
+        }
+        else if (event == Event::Pressure)
+        {
+            m_statisticsPressure.Update(data.pressure);
+            std::cout << "> Pressure: " << std::endl;
             PrintStats(m_statisticsPressure);
         }
-        else if (observable == m_weatherDataOut)
+        else if (event == Event::Humidity)
+        {
+            m_statisticsHumidity.Update(data.humidity);
+            std::cout << "> Humidity: " << std::endl;
+            PrintStats(m_statisticsHumidity);
+        }
+        else if (event == Event::WindSpeed)
         {
             m_windStats.Update(data.windSpeed, data.windDirection);
-
-            std::cout << "Location: outside" << std::endl;
-            std::cout << "Temperature" << std::endl;
-            PrintStats(m_statisticsTemperature);
-            std::cout << "Humidity" << std::endl;
-            PrintStats(m_statisticsHumidity);
-            std::cout << "Pressure" << std::endl;
-            PrintStats(m_statisticsPressure);
-            std::cout << "Max wind speed " << m_windStats.GetMaxSpeed() << std::endl;
-            std::cout << "Min wind speed " << m_windStats.GetMinSpeed() << std::endl;
-            std::cout << "Average wind speed " << m_windStats.GetAverageSpeed() << std::endl;
-            std::cout << "Wind Direction " << m_windStats.GetAverageDirection() << std::endl;
+            std::cout << "> WindSpeed: " << std::endl;
+            std::cout << ">> Max: " << m_windStats.GetMaxSpeed() << std::endl;
+            std::cout << ">> Min: " << m_windStats.GetMinSpeed() << std::endl;
+            std::cout << ">> Average: " << m_windStats.GetAverageSpeed() << std::endl;
         }
-        else
+        else if (event == Event::WindDirection)
         {
-            std::cout << "Weather Station is unknown" << std::endl;
+            m_windStats.Update(data.windSpeed, data.windDirection);
+            std::cout << "> Wind Direction " << m_windStats.GetAverageDirection() << std::endl;
         }
-
-        std::cout << "----------------" << std::endl;
+        std::cout << "---------------------" << std::endl;
     }
 
     Stats m_statisticsTemperature;
     Stats m_statisticsHumidity;
     Stats m_statisticsPressure;
     WindStats m_windStats;
-
-    const Observable<WeatherData>* m_weatherDataIn;
-    const Observable<WeatherData>* m_weatherDataOut;
 };

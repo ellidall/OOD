@@ -45,7 +45,7 @@ private:
     int m_countAcc = 0;
 };
 
-class CStatsDisplay : public IObserver<WeatherData>
+class StatsDisplay : public IObserver<WeatherData>
 {
 private:
     void PrintStats(const Stats& stats)

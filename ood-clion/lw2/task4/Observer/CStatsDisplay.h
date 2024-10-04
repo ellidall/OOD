@@ -45,10 +45,10 @@ private:
     int m_countAcc = 0;
 };
 
-class CStatsDisplay : public IObserver<WeatherData>
+class StatsDisplay : public IObserver<WeatherData>
 {
 public:
-    CStatsDisplay(
+    StatsDisplay(
             Observable<WeatherData>* m_weatherDataIn,
             Observable<WeatherData>* m_weatherDataOut
     ) : m_weatherDataIn(m_weatherDataIn), m_weatherDataOut(m_weatherDataOut)

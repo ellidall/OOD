@@ -3,7 +3,7 @@
 #include "Observable.h"
 #include "Data/WeatherData.h"
 
-class WeatherManager : public Observable<WeatherData>
+class WeatherManager : public Observable<WeatherData, Event>
 {
 public:
     WeatherManager() = default;
@@ -33,20 +33,54 @@ public:
         return m_windDirection;
     }
 
-    void MeasurementsChanged()
+    void SetTemperature(double temperature)
     {
-        NotifyObservers();
+        m_temperature = temperature;
+        NotifyObservers(Event::Temperature);
     }
 
-    void SetMeasurements(double temp, double humidity, double pressure, double windSpeed = 0, double windDirection = 0)
+    void SetHumidity(double humidity)
     {
         m_humidity = humidity;
-        m_temperature = temp;
+        NotifyObservers(Event::Humidity);
+    }
+
+    void SetPressure(double pressure)
+    {
+        m_pressure = pressure;
+        NotifyObservers(Event::Pressure);
+    }
+
+    void SetWindSpeed(double windSpeed)
+    {
+        m_windSpeed = windSpeed;
+        NotifyObservers(Event::WindSpeed);
+    }
+
+    void SetWindDirection(double windDirection)
+    {
+        m_windDirection = windDirection;
+        NotifyObservers(Event::WindDirection);
+    }
+
+    void MeasurementsChanged(Event event)
+    {
+        NotifyObservers(event);
+    }
+
+    void SetMeasurements(double temperature, double humidity, double pressure, double windSpeed, double windDirection)
+    {
+        m_humidity = humidity;
+        m_temperature = temperature;
         m_pressure = pressure;
         m_windSpeed = windSpeed;
         m_windDirection = windDirection;
 
-        NotifyObservers();
+        NotifyObservers(Event::Humidity);
+        NotifyObservers(Event::Temperature);
+        NotifyObservers(Event::Pressure);
+        NotifyObservers(Event::WindSpeed);
+        NotifyObservers(Event::WindDirection);
     }
 
 protected:

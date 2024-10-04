@@ -6,7 +6,7 @@ int main()
 {
     WeatherManager weatherManagerIn;
     WeatherManager weatherManagerOut;
-    CStatsDisplay statsDisplay(&weatherManagerIn, &weatherManagerOut);
+    StatsDisplay statsDisplay(&weatherManagerIn, &weatherManagerOut);
 
     weatherManagerIn.RegisterObserver(statsDisplay, 1);
     weatherManagerOut.RegisterObserver(statsDisplay, 2);

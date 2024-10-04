@@ -6,7 +6,7 @@ int main()
 {
     WeatherManager weatherManager;
     CDisplay display;
-    CStatsDisplay statsDisplay;
+    StatsDisplay statsDisplay;
 
     weatherManager.RegisterObserver(display, 1);
     weatherManager.RegisterObserver(statsDisplay, 2);
