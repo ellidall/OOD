@@ -55,6 +55,13 @@ public:
     {}
 
 private:
+    void PrintStats(const Stats& stats)
+    {
+        std::cout << "Max: " << stats.GetMax() << std::endl;
+        std::cout << "Min:" << stats.GetMin() << std::endl;
+        std::cout << "Average:" << stats.GetAverage() << std::endl;
+    }
+
     void Update(const WeatherData& data, const Observable<WeatherData>* observable) override
     {
         std::string location = "Not Stated";
@@ -72,17 +79,12 @@ private:
         m_statisticsPressure.Update(data.pressure);
 
         std::cout << "Location " << location << std::endl;
-        std::cout << "Max Temp " << m_statisticsTemperature.GetMax() << std::endl;
-        std::cout << "Min Temp " << m_statisticsTemperature.GetMin() << std::endl;
-        std::cout << "Average Temp " << m_statisticsTemperature.GetAverage() << std::endl;
-
-        std::cout << "Max Humidity " << m_statisticsHumidity.GetMax() << std::endl;
-        std::cout << "Min Humidity " << m_statisticsHumidity.GetMin() << std::endl;
-        std::cout << "Average Humidity " << m_statisticsHumidity.GetAverage() << std::endl;
-
-        std::cout << "Max Pressure " << m_statisticsPressure.GetMax() << std::endl;
-        std::cout << "Min Pressure " << m_statisticsPressure.GetMin() << std::endl;
-        std::cout << "Average Pressure " << m_statisticsPressure.GetAverage() << std::endl;
+        std::cout << "Temperature" << std::endl;
+        PrintStats(m_statisticsTemperature);
+        std::cout << "Humidity" << std::endl;
+        PrintStats(m_statisticsHumidity);
+        std::cout << "Pressure" << std::endl;
+        PrintStats(m_statisticsPressure);
 
         std::cout << "----------------" << std::endl;
     }
