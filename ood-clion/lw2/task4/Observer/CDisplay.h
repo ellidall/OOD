@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "../Data/WeatherData.h"
+#include "Data/WeatherData.h"
 #include "IObserver.h"
 
 class CDisplay : public IObserver<WeatherData>

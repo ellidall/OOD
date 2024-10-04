@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Observable.h"
-#include "../Data/WeatherData.h"
+#include "Data/WeatherData.h"
 
 class WeatherManager : public Observable<WeatherData>
 {

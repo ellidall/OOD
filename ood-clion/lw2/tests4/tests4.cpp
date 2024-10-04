@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "../task4/Data/WeatherData.h"
+#include "../task4/Observer/Data/WeatherData.h"
 #include "../task4/Observer/WeatherManager.h"
 
 class MockDisplay : public IObserver<WeatherData>
 {
 public:
-    MOCK_METHOD(void, Update, (const WeatherData& data, const Observable<WeatherData>* observable), (override));
+    MOCK_METHOD(void, Update, (const WeatherData& data, const IObservable<WeatherData>* observable), (override));
 
     MockDisplay() = default;
 };

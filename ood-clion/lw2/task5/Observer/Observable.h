@@ -2,8 +2,7 @@
 
 #include <unordered_set>
 #include <map>
-#include "../Observer/IObserver.h"
-#include "IObservable.h"
+#include "IObserver.h"
 
 template<typename T>
 class Observable : public IObservable<T>

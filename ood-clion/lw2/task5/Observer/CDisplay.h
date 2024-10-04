@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "../Data/WeatherData.h"
+#include "Data/WeatherData.h"
 #include "IObserver.h"
 
 class CDisplay : public IObserver<WeatherData>
@@ -15,9 +15,9 @@ public:
 
 private:
 
-    void Update(const WeatherData& data, const Observable<WeatherData>* observable) override
+    void Update(const WeatherData& data, const IObservable<WeatherData>* observable) override
     {
-        std::string location;
+        std::string location = "Not Stated";
         if (observable == m_weatherDataIn)
         {
             location = "Inside Weather Station";
@@ -26,18 +26,11 @@ private:
         {
             location = "Outside Weather Station";
         }
-        else
-        {
-            std::cout << "Weather Station is unknown" << std::endl;
-            return;
-        }
 
         std::cout << "Location " << location << std::endl;
         std::cout << "Current Temp " << data.temperature << std::endl;
         std::cout << "Current Humidity " << data.humidity << std::endl;
         std::cout << "Current Pressure " << data.pressure << std::endl;
-        std::cout << "Current Wind direction " << data.windDirection << std::endl;
-        std::cout << "Current Wind speed " << data.windSpeed << std::endl;
         std::cout << "----------------" << std::endl;
     }
 

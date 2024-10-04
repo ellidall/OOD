@@ -4,7 +4,7 @@
 #include <limits>
 #include <algorithm>
 #include <cmath>
-#include "../Data/WeatherData.h"
+#include "Data/WeatherData.h"
 #include "IObserver.h"
 
 class Stats
@@ -126,7 +126,7 @@ private:
         std::cout << "Average:" << stats.GetAverage() << std::endl;
     }
 
-    void Update(const WeatherData& data, const Observable<WeatherData>* observable) override
+    void Update(const WeatherData& data, const IObservable<WeatherData>* observable) override
     {
         m_statisticsTemperature.Update(data.temperature);
         m_statisticsHumidity.Update(data.humidity);

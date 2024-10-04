@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <limits>
-#include "../Data/WeatherData.h"
+#include "Data/WeatherData.h"
 #include "IObserver.h"
 
 class Stats
