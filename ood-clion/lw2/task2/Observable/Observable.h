@@ -22,6 +22,7 @@ public:
 
 protected:
     void NotifyObservers() override
+    // почему при удалении текущено объекта происходят проблемы, а при удалении другого нет
     {
         T data = GetChangedData();
         auto copyOfObservers = m_observers;

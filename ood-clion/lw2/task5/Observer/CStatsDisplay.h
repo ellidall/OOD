@@ -1,0 +1,186 @@
+#pragma once
+
+#include <iostream>
+#include <limits>
+#include <algorithm>
+#include <cmath>
+#include "../Data/WeatherData.h"
+#include "IObserver.h"
+
+class Stats
+{
+public:
+    void Update(double value)
+    {
+        if (m_minValue > value)
+        {
+            m_minValue = value;
+        }
+        if (m_maxValue < value)
+        {
+            m_maxValue = value;
+        }
+
+        m_acc += value;
+        m_countAcc++;
+    }
+
+    [[nodiscard]] double GetMin() const
+    {
+        return m_minValue;
+    }
+
+    [[nodiscard]] double GetMax() const
+    {
+        return m_maxValue;
+    }
+
+    [[nodiscard]] double GetAverage() const
+    {
+        return m_acc / static_cast<double>(m_countAcc);
+    }
+
+private:
+    double m_minValue = std::numeric_limits<double>::infinity();
+    double m_maxValue = -std::numeric_limits<double>::infinity();
+    double m_acc = 0;
+    int m_countAcc = 0;
+};
+
+class WindStats
+{
+public:
+    void Update(double speed, double direction)
+    {
+        if (m_minSpeed > speed)
+        {
+            m_minSpeed = speed;
+        }
+        if (m_maxSpeed < speed)
+        {
+            m_maxSpeed = speed;
+        }
+        m_totalSpeed += speed;
+
+        double radianDirection = direction * M_PI / 180.0;
+        m_sumX += speed * cos(radianDirection);
+        m_sumY += speed * sin(radianDirection);
+
+        m_acc++;
+    }
+
+    [[nodiscard]] double GetMaxSpeed() const
+    {
+        return m_maxSpeed;
+    }
+
+    [[nodiscard]] double GetMinSpeed() const
+    {
+        return m_minSpeed;
+    }
+
+    [[nodiscard]] double GetAverageSpeed() const
+    {
+        if (m_acc == 0)
+        {
+            return 0;
+        }
+
+        return m_totalSpeed / m_acc;
+    }
+
+    [[nodiscard]] double GetAverageDirection() const
+    {
+        if (m_acc == 0)
+        {
+            return 0;
+        }
+
+        double averageDegreeDirection = atan2(m_sumY / m_acc, m_sumX / m_acc) * 180.0 / M_PI;
+        return fmod(averageDegreeDirection + 360.0, 360.0);
+    }
+
+private:
+    double m_totalSpeed = 0;
+    double m_minSpeed = std::numeric_limits<double>::infinity();
+    double m_maxSpeed = -std::numeric_limits<double>::infinity();
+    double m_sumX = 0;
+    double m_sumY = 0;
+    unsigned m_acc = 0;
+};
+
+class CStatsDisplay : public IObserver<WeatherData>
+{
+public:
+    CStatsDisplay(
+            Observable<WeatherData>* m_weatherDataIn,
+            Observable<WeatherData>* m_weatherDataOut
+    ) : m_weatherDataIn(m_weatherDataIn), m_weatherDataOut(m_weatherDataOut)
+    {}
+
+private:
+    void Update(const WeatherData& data, const Observable<WeatherData>* observable) override
+    {
+        if (observable == m_weatherDataIn)
+        {
+            m_statisticsTemperature.Update(data.temperature);
+            m_statisticsHumidity.Update(data.humidity);
+            m_statisticsPressure.Update(data.pressure);
+
+            std::cout << "Location: inside" << std::endl;
+
+            std::cout << "Max Temp " << m_statisticsTemperature.GetMax() << std::endl;
+            std::cout << "Min Temp " << m_statisticsTemperature.GetMin() << std::endl;
+            std::cout << "Average Temp " << m_statisticsTemperature.GetAverage() << std::endl;
+
+            std::cout << "Max Hum " << m_statisticsHumidity.GetMax() << std::endl;
+            std::cout << "Min Hum " << m_statisticsHumidity.GetMin() << std::endl;
+            std::cout << "Average Hum " << m_statisticsHumidity.GetAverage() << std::endl;
+
+            std::cout << "Max Pressure " << m_statisticsPressure.GetMax() << std::endl;
+            std::cout << "Min Pressure " << m_statisticsPressure.GetMin() << std::endl;
+            std::cout << "Average Pressure " << m_statisticsPressure.GetAverage() << std::endl;
+        }
+        else if (observable == m_weatherDataOut)
+        {
+            m_statisticsTemperature.Update(data.temperature);
+            m_statisticsHumidity.Update(data.humidity);
+            m_statisticsPressure.Update(data.pressure);
+            m_windStats.Update(data.windSpeed, data.windDirection);
+
+            std::cout << "Location: outside" << std::endl;
+
+            std::cout << "Max Temp " << m_statisticsTemperature.GetMax() << std::endl;
+            std::cout << "Min Temp " << m_statisticsTemperature.GetMin() << std::endl;
+            std::cout << "Average Temp " << m_statisticsTemperature.GetAverage() << std::endl;
+
+            std::cout << "Max Hum " << m_statisticsHumidity.GetMax() << std::endl;
+            std::cout << "Min Hum " << m_statisticsHumidity.GetMin() << std::endl;
+            std::cout << "Average Hum " << m_statisticsHumidity.GetAverage() << std::endl;
+
+            std::cout << "Max Pressure " << m_statisticsPressure.GetMax() << std::endl;
+            std::cout << "Min Pressure " << m_statisticsPressure.GetMin() << std::endl;
+            std::cout << "Average Pressure " << m_statisticsPressure.GetAverage() << std::endl;
+
+            std::cout << "Max wind speed " << m_windStats.GetMaxSpeed() << std::endl;
+            std::cout << "Min wind speed " << m_windStats.GetMinSpeed() << std::endl;
+            std::cout << "Average wind speed " << m_windStats.GetAverageSpeed() << std::endl;
+
+            std::cout << "Wind Direction " << m_windStats.GetAverageDirection() << std::endl;
+        }
+        else
+        {
+            std::cout << "Weather Station is unknown" << std::endl;
+        }
+
+        std::cout << "----------------" << std::endl;
+    }
+
+    Stats m_statisticsTemperature;
+    Stats m_statisticsHumidity;
+    Stats m_statisticsPressure;
+    WindStats m_windStats;
+
+    const Observable<WeatherData>* m_weatherDataIn;
+    const Observable<WeatherData>* m_weatherDataOut;
+};

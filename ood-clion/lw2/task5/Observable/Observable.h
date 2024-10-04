@@ -5,7 +5,7 @@
 #include "../Observer/IObserver.h"
 #include "IObservable.h"
 
-template<class T>
+template<typename T>
 class Observable : public IObservable<T>
 {
 public:
@@ -13,7 +13,6 @@ public:
 
     void RegisterObserver(ObserverType& observer, int priority) override
     {
-        // обработать ошибки, чтобы состояние было валидным
         auto result = m_priorityToObservers.insert({priority, {}});
         result.first->second.insert(&observer);
         m_observerToPriority[&observer] = priority;
@@ -27,7 +26,6 @@ public:
             int priority = it->second;
             m_priorityToObservers[priority].erase(&observer);
 
-            //удалять только один раз
             if (m_priorityToObservers[priority].empty())
             {
                 m_priorityToObservers.erase(priority);
@@ -46,7 +44,7 @@ protected:
         {
             for (auto& observer : it->second)
             {
-                observer->Update(data);
+                observer->Update(data, this);
             }
         }
     }
