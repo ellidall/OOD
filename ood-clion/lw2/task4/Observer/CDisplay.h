@@ -15,7 +15,7 @@ public:
 
 private:
 
-    void Update(const WeatherData& data, const Observable<WeatherData>* observable) override
+    void Update(const WeatherData& data, const IObservable<WeatherData>* observable) override
     {
         std::string location = "Not Stated";
         if (observable == m_weatherDataIn)

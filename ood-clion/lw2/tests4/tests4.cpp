@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "../task4/Data/WeatherData.h"
-#include "../task4/Observable/WeatherManager.h"
+#include "../task4/Observer/WeatherManager.h"
 
 class MockDisplay : public IObserver<WeatherData>
 {
