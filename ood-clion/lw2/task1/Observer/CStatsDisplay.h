@@ -48,7 +48,7 @@ private:
 class StatsDisplay : public IObserver<WeatherData>
 {
 private:
-    void PrintStats(const Stats& stats)
+    static void PrintStats(const Stats& stats)
     {
         std::cout << "Max: " << stats.GetMax() << std::endl;
         std::cout << "Min:" << stats.GetMin() << std::endl;
@@ -61,7 +61,6 @@ private:
         m_statisticsHumidity.Update(data.humidity);
         m_statisticsPressure.Update(data.pressure);
 
-        //устранить дублирование
         std::cout << "Temperature" << std::endl;
         PrintStats(m_statisticsTemperature);
         std::cout << "Humidity" << std::endl;

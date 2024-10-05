@@ -12,6 +12,7 @@ public:
 
     void RegisterObserver(ObserverType& observer, EventType event) override
     {
+        // обработать исключение при вставке
         m_observers[event].insert(&observer);
     }
 

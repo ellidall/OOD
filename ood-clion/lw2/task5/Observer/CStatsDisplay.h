@@ -96,7 +96,7 @@ public:
             return 0;
         }
 
-        double averageDegreeDirection = atan2(m_sumY / m_acc, m_sumX / m_acc) * 180.0 / M_PI;
+        double averageDegreeDirection = atan2(m_sumY, m_sumX) * 180.0 / M_PI;
         return fmod(averageDegreeDirection + 360.0, 360.0);
     }
 
@@ -119,12 +119,13 @@ public:
     {}
 
 private:
-    void PrintStats(const Stats& stats)
+    static void PrintStats(const Stats& stats)
     {
         std::cout << "Max: " << stats.GetMax() << std::endl;
         std::cout << "Min:" << stats.GetMin() << std::endl;
         std::cout << "Average:" << stats.GetAverage() << std::endl;
     }
+    // сделать два объекта станции и даты
 
     void Update(const WeatherData& data, const IObservable<WeatherData>* observable) override
     {

@@ -2,6 +2,7 @@
 
 #include "Data/Event.h"
 
+// добавить приоритеты
 template <typename T, typename EventType>
 class IObservable;
 
