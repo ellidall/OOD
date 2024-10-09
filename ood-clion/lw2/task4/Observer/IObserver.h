@@ -3,12 +3,10 @@
 template <typename T>
 class IObservable;
 
-//перенеси в Observable
 template<typename T>
 class IObserver
 {
 public:
-    // Не зависеть от конкретного Observable
     virtual void Update(const T& data, const IObservable<T>* observable) = 0;
     virtual ~IObserver() = default;
 };
