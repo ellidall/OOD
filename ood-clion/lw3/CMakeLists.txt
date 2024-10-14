@@ -4,6 +4,7 @@ project(lw3)
 set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(task1)
+add_subdirectory(task3)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -13,4 +14,4 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-#add_subdirectory(tests)
+add_subdirectory(tests)
