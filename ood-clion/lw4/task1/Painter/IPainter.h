@@ -7,5 +7,5 @@ class IPainter
 {
 public:
     virtual ~IPainter() = default;
-    virtual void DrawPicture(const PictureDraft& draft, gfx::ICanvas& canvas) = 0;
+    virtual void DrawPicture(const PictureDraft& draft, ICanvas& canvas) = 0;
 };

@@ -20,7 +20,7 @@ public:
 	{
 	}
 
-	void Draw(gfx::ICanvas &canvas) const override
+	void Draw(ICanvas &canvas) const override
 	{
 		canvas.SetColor(GetColor());
 

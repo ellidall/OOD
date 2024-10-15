@@ -19,7 +19,7 @@ public:
     {
     }
 
-    void Draw(gfx::ICanvas& canvas) const override
+    void Draw(ICanvas& canvas) const override
     {
         canvas.SetColor(GetColor());
         canvas.DrawEllipse(m_center.x, m_center.y, m_horizontalRadius, m_verticalRadius);

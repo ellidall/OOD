@@ -12,7 +12,7 @@ int main()
 {
     try
     {
-        gfx::PNGCanvas canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+        PNGCanvas canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
         ShapeFactory shapeFactory;
         Designer designer(shapeFactory);
         Painter painter;

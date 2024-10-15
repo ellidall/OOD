@@ -9,7 +9,7 @@ public:
     explicit Client(IDesigner& designer) : m_designer(designer)
     {}
 
-    void HandleCommand(std::istream& inputData, gfx::ICanvas& canvas, IPainter& painter)
+    void HandleCommand(std::istream& inputData, ICanvas& canvas, IPainter& painter)
     {
         PictureDraft pictureDraft = m_designer.CreateDraft(inputData);
         painter.DrawPicture(pictureDraft, canvas);

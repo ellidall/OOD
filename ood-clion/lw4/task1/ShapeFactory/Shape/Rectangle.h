@@ -17,7 +17,7 @@ public:
 	{
 	}
 
-	void Draw(gfx::ICanvas &canvas) const override
+	void Draw(ICanvas &canvas) const override
 	{
 		canvas.SetColor(GetColor());
 		canvas.MoveTo(m_bounds.leftTop.x, m_bounds.leftTop.y);

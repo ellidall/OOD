@@ -3,7 +3,6 @@
 #include <memory>
 #include <algorithm>
 #include <sstream>
-
 #include "IShapeFactory.h"
 #include "Shape/Triangle.h"
 #include "Shape/Ellipse.h"

@@ -9,8 +9,6 @@
 #include <cmath>
 #include <iomanip>
 
-namespace gfx
-{
 class PNGCanvas final : public ICanvas
 {
 public:
@@ -136,4 +134,3 @@ private:
 		}
 	}
 };
-}
