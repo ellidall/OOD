@@ -5,7 +5,7 @@
 #include "Shape.h"
 #include <cmath>
 
-class RegularPolygon final : public Shape
+class RegularPolygon : public Shape
 {
 public:
 	RegularPolygon(

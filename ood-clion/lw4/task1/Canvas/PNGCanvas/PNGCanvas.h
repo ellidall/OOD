@@ -9,7 +9,7 @@
 #include <cmath>
 #include <iomanip>
 
-class PNGCanvas final : public ICanvas
+class PNGCanvas : public ICanvas
 {
 public:
 	using Color = uint32_t;
