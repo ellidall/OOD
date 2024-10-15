@@ -10,7 +10,7 @@ struct Rect
     Point rightBottom;
 };
 
-class Rectangle final : public Shape
+class Rectangle : public Shape
 {
 public:
 	Rectangle(const Color color, const Rect& bounds) : Shape(color), m_bounds(bounds)

@@ -19,12 +19,6 @@ public:
 		uint8_t r, g, b, a;
 	};
 
-	struct Point
-	{
-		double x;
-		double y;
-	};
-
 	PNGCanvas(const unsigned width, const unsigned height)
 		: m_width(width), m_height(height)
 	{
