@@ -12,14 +12,14 @@ public:
 
     [[nodiscard]] bool IsEOF() override
     {
-        return m_stream->IsEOF();
+        return m_stream->IsEOF() && m_count == 0;
     }
 
     uint8_t ReadByte() override
     {
         if (m_count == 0)
         {
-            if (m_stream->IsEOF())
+            if (IsEOF())
             {
                 return 0;
             }

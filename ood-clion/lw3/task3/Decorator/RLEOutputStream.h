@@ -19,7 +19,7 @@ public:
         }
         else if (data == m_currentByte && m_count < 255)
         {
-            ++m_count;
+            m_count++;
         }
         else
         {
