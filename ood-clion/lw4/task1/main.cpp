@@ -1,22 +1,30 @@
 #include <iostream>
-#include "Beverages.h"
-#include "Condiments.h"
+#include "ShapeFactory/ShapeFactory.h"
+#include "Designer/Designer.h"
+#include "Painter/Painter.h"
+#include "Client.h"
+#include "Canvas/PNGCanvas/PNGCanvas.h"
+
+constexpr int CANVAS_WIDTH = 800;
+constexpr int CANVAS_HEIGHT = 500;
 
 int main()
 {
-    Latte latte(Portion::STANDARD);
-    std::cout << latte.GetDescription() << ": " << latte.GetCost() << std::endl;
+    try
+    {
+        gfx::PNGCanvas canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+        ShapeFactory shapeFactory;
+        Designer designer(shapeFactory);
+        Painter painter;
+        Client client(designer);
+        client.HandleCommand(std::cin, canvas, painter);
+        canvas.SaveToFile("../../output.png");
+    }
+    catch (const std::exception& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 
-    Milkshake milkshake1(MilkshakeSize::SMALL);
-    Milkshake milkshake2(MilkshakeSize::MEDIUM);
-    Milkshake milkshake3(MilkshakeSize::LARGE);
-    std::cout << milkshake1.GetDescription() << ": " << milkshake1.GetCost() << std::endl;
-    std::cout << milkshake2.GetDescription() << ": " << milkshake2.GetCost() << std::endl;
-    std::cout << milkshake3.GetDescription() << ": " << milkshake3.GetCost() << std::endl;
-
-    auto cappuccino = std::make_unique<Cappuccino>(Portion::STANDARD);
-    auto cappuccinoWithLiquor = std::make_unique<Liquor>(std::move(cappuccino), LiquorType::NUTTY);
-    std::cout << cappuccinoWithLiquor->GetDescription() << ": " << cappuccinoWithLiquor->GetCost() << std::endl;
 
     return EXIT_SUCCESS;
 }
