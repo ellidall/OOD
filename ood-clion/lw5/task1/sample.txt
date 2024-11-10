@@ -1,0 +1,10 @@
+InsertParagraph end Hello!!!
+InsertImage end 100 100 img.png
+SetTitle TITLE
+List
+ReplaceText 0 NEWtext
+ResizeImage 1 200 200
+Save ../../task1/out.html
+
+Склеивание параграфов
+Сделать так, чтобы изображение не удалялось при переполнениии вектора команд
