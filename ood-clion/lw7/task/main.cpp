@@ -84,10 +84,8 @@ int main(int argc, char* argv[])
 
     Slide slide(800, 800, group);
 
-    IStyle& style = group->GetFillStyle();
-    auto* groupStyle = dynamic_cast<GroupStyle*>(&style);
     group->InsertShape(rect3, 2);
-    groupStyle->SetColor(0xFF0000FF);
+    group->GetFillStyle().SetColor(0xFF0000FF);
 
     gfx::PNGCanvas canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     slide.Draw(canvas);

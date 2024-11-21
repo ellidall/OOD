@@ -14,7 +14,8 @@ public:
     {
         if (m_shapes.empty())
         {
-            return std::nullopt;
+            // не проверено в тестах
+           // return std::nullopt;
         }
 
         double left = std::numeric_limits<double>::max();
@@ -23,9 +24,9 @@ public:
         double bottom = std::numeric_limits<double>::lowest();
 
         bool isGroupsEmpty = true;
-        for (const auto& pair : m_shapes)
+        for (const auto& shape : m_shapes)
         {
-            std::optional<RectD> frame = pair.second->GetFrame();
+            std::optional<RectD> frame = shape->GetFrame();
             if (frame == std::nullopt)
             {
                 continue;
@@ -49,23 +50,24 @@ public:
     {
         if (GetFrame().has_value())
         {
-            auto [left, top, width, height] = GetFrame().value();
+            auto [left, top, width, height] = *GetFrame();
             const double scaleX = rect.width / width;
             const double scaleY = rect.height / height;
 
-            for (const auto& pair : m_shapes)
+            for (const auto& shape : m_shapes)
             {
-                std::optional<RectD> shapeFrame = pair.second->GetFrame();
+                std::optional<RectD> shapeFrame = shape->GetFrame();
                 if (shapeFrame == std::nullopt)
                 {
-                    continue;
+                    // ситуация не проверена в тестах
+                  //  continue;
                 }
 
                 const double newLeft = rect.left + (shapeFrame.value().left - left) * scaleX;
                 const double newTop = rect.top + (shapeFrame.value().top - top) * scaleY;
                 const double newWidth = shapeFrame.value().width * scaleX;
                 const double newHeight = shapeFrame.value().height * scaleY;
-                pair.second->SetFrame(RectD({newLeft, newTop, newWidth, newHeight}));
+                shape->SetFrame(RectD({newLeft, newTop, newWidth, newHeight}));
             }
         }
     }
@@ -92,11 +94,11 @@ public:
 
     void Draw(gfx::ICanvas& canvas) const override
     {
-        for (const auto& pair : m_shapes)
+        for (const auto& shape : m_shapes)
         {
-            if (pair.second)
+            if (shape)
             {
-                pair.second->Draw(canvas);
+                shape->Draw(canvas);
             }
         }
     }
@@ -108,22 +110,25 @@ public:
 
     void InsertShape(const std::shared_ptr<IShape>& shape, size_t position) override
     {
-        m_shapes.insert({position, shape});
+        m_shapes.insert(m_shapes.begin() + static_cast<long long>(position), shape);
         m_fillStyle->InsertStyle(shape->GetFillStyle(), position);
         m_outlineStyle->InsertStyle(shape->GetOutlineStyle(), position);
     }
 
     std::shared_ptr<IShape> GetShapeAtIndex(size_t index) const override
     {
-        return m_shapes.at(index);
+        if (index >= m_shapes.size() || !m_shapes[index])
+        {
+            return nullptr;
+        }
+        return m_shapes[index];
     }
 
     void RemoveShapeAtIndex(size_t index) override
     {
-        auto it = m_shapes.find(index);
-        if (it != m_shapes.end())
+        if (index < m_shapes.size())
         {
-            m_shapes.erase(it);
+            m_shapes.erase(m_shapes.begin() + static_cast<long long>(index));
             m_fillStyle->RemoveStyleAtIndex(index);
             m_outlineStyle->RemoveStyleAtIndex(index);
         }
@@ -140,8 +145,8 @@ public:
     }
 
 private:
-    std::map<size_t, std::shared_ptr<IShape>> m_shapes;
-//    std::vector<std::shared_ptr<IShape>> m_shapes;
+    std::vector<std::shared_ptr<IShape>> m_shapes;
+    // создавать в куче не обязательно, так как конкретнй класс
     std::unique_ptr<IGroupStyle> m_outlineStyle = std::make_unique<GroupStyle>();
     std::unique_ptr<IGroupStyle> m_fillStyle = std::make_unique<GroupStyle>();
 };

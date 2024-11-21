@@ -11,17 +11,19 @@ class GroupStyle : public IGroupStyle
 public:
     GroupStyle() = default;
 
+    //без интерфейса IGroupStyle
     void InsertStyle(IStyle& style, size_t position) override
     {
-        m_styles.insert({position, style});
+        m_styles.insert(m_styles.begin() + static_cast<long long>(position), style);
     }
 
+    // добавить толщину линии
+    // избавиться от дублирования
     void RemoveStyleAtIndex(size_t index) override
     {
-        auto it = m_styles.find(index);
-        if (it != m_styles.end())
+        if (index < m_styles.size())
         {
-            m_styles.erase(it);
+            m_styles.erase(m_styles.begin() + static_cast<long long>(index));
         }
     }
 
@@ -33,17 +35,18 @@ public:
         }
 
         std::optional<bool> commonEnabled = std::nullopt;
-        for (const auto& pair : m_styles)
+        for (const auto& style : m_styles)
         {
             if (commonEnabled == std::nullopt)
             {
-                commonEnabled = pair.second.IsEnabled();
+                commonEnabled = style.get().IsEnabled();
             }
 
-            const auto styleEnabled = pair.second.IsEnabled();
+            const auto styleEnabled = style.get().IsEnabled();
             if (commonEnabled != styleEnabled)
             {
-                return std::nullopt;
+                //проверить в тестах
+               // return std::nullopt;
             }
         }
         return commonEnabled;
@@ -52,9 +55,9 @@ public:
     void Enable(bool enabled) override
     {
         m_enabled = enabled;
-        for (const auto& pair : m_styles)
+        for (const auto& style : m_styles)
         {
-            pair.second.Enable(enabled);
+            style.get().Enable(enabled);
         }
     }
 
@@ -66,14 +69,14 @@ public:
         }
 
         std::optional<RGBAColor> commonColor = std::nullopt;
-        for (const auto& pair : m_styles)
+        for (const auto& style : m_styles)
         {
             if (commonColor == std::nullopt)
             {
-                commonColor = pair.second.GetColor();
+                commonColor = style.get().GetColor();
             }
 
-            const auto styleColor = pair.second.GetColor();
+            const auto styleColor = style.get().GetColor();
             if (commonColor != styleColor)
             {
                 return std::nullopt;
@@ -85,14 +88,14 @@ public:
     void SetColor(RGBAColor color) override
     {
         m_color = color;
-        for (const auto& pair : m_styles)
+        for (const auto& style : m_styles)
         {
-            pair.second.SetColor(color);
+            style.get().SetColor(color);
         }
     }
 
 private:
     std::optional<bool> m_enabled;
     std::optional<RGBAColor> m_color;
-    std::map<size_t, IStyle&> m_styles;
+    std::vector<std::reference_wrapper<IStyle>> m_styles;
 };
