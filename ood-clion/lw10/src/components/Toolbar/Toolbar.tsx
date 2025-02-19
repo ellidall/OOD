@@ -78,7 +78,7 @@ const JsonBlock: React.FC<{
 		a.download = 'Presentation.json'
 		a.click()
 		URL.revokeObjectURL(url)
-		alert('Canvas data saved successfully')
+		alert('Успешно сохранено')
 	}
 
 	const handleLoadJson = (event: React.ChangeEvent<HTMLInputElement>, controller: CanvasController) => {

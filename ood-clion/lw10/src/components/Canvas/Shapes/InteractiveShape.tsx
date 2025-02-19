@@ -109,7 +109,6 @@ class InteractiveShape extends Component<InteractiveShapeProps> {
 				<div
 					style={{
 						position: 'absolute',
-						zIndex:2,
 						top: -5,
 						left: -5,
 						width: 10,
@@ -122,7 +121,6 @@ class InteractiveShape extends Component<InteractiveShapeProps> {
 				<div
 					style={{
 						position: 'absolute',
-						zIndex:2,
 						top: -5,
 						right: -5,
 						width: 10,
@@ -135,7 +133,6 @@ class InteractiveShape extends Component<InteractiveShapeProps> {
 				<div
 					style={{
 						position: 'absolute',
-						zIndex:2,
 						bottom: -5,
 						left: -5,
 						width: 10,
@@ -148,7 +145,6 @@ class InteractiveShape extends Component<InteractiveShapeProps> {
 				<div
 					style={{
 						position: 'absolute',
-						zIndex:2,
 						bottom: -5,
 						right: -5,
 						width: 10,
