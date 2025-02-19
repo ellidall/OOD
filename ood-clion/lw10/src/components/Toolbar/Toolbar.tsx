@@ -46,7 +46,7 @@ class Toolbar extends Component<ToolbarProps> {
 					model={this.canvasModel}
 					onLoad={() => this.props.setSelectedShapeId(undefined)}
 				/>
-				<CreateArtObjectBlock controller={this.controller} />
+				<CreateBlock controller={this.controller} />
 				<HistoryBlock
 					controller={this.controller}
 					selectedShapeId={this.props.selectedShapeId}
@@ -57,7 +57,71 @@ class Toolbar extends Component<ToolbarProps> {
 	}
 }
 
-const CreateArtObjectBlock = React.memo(({controller}: {controller: CanvasController}) => {
+const JsonBlock: React.FC<{
+	controller: CanvasController,
+	model: ICanvasReadModel,
+	onLoad: () => void
+}> = ({controller, model, onLoad}) => {
+	const buttonStyle: CSSProperties = {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 5,
+		border: 'solid 2px #413737'
+	}
+
+	const handleSaveJson = (jsonData: string) => {
+		const blob = new Blob([jsonData], {type: 'application/json'})
+		const url = URL.createObjectURL(blob)
+		const a = document.createElement('a')
+		a.href = url
+		a.download = 'Presentation.json'
+		a.click()
+		URL.revokeObjectURL(url)
+		alert('Canvas data saved successfully')
+	}
+
+	const handleLoadJson = (event: React.ChangeEvent<HTMLInputElement>, controller: CanvasController) => {
+		const fileInput = event.target
+		const file = fileInput.files?.[0]
+
+		if (file) {
+			const reader = new FileReader()
+			reader.onload = e => {
+				try {
+					const jsonString = e.target?.result as string
+					controller.loadCanvasFromJson(jsonString)
+				}
+				catch (error) {
+					alert(error)
+				}
+			}
+
+			reader.readAsText(file)
+		}
+		onLoad()
+	}
+
+	return(
+		<div style={{display: 'flex', gap: '10px', padding: '10px'}}>
+			<button onClick={() => handleSaveJson(model.serializeCanvasToJson())} style={buttonStyle}>{'Save'}</button>
+			<input
+				id={'inputJson'}
+				type={'file'}
+				accept={'.json'}
+				onChange={e => handleLoadJson(e, controller)}
+				style={{display: 'none'}}
+			/>
+			<button style={buttonStyle}>
+				<label htmlFor={'inputJson'}>
+					{'Load'}
+				</label>
+			</button>
+		</div>
+	)
+}
+
+const CreateBlock = React.memo(({controller}: {controller: CanvasController}) => {
 	const buttonStyle: CSSProperties = {
 		width: 40,
 		height: 40,
@@ -115,72 +179,6 @@ const CreateArtObjectBlock = React.memo(({controller}: {controller: CanvasContro
 		</div>
 	)
 })
-
-const handleLoadJson = (event: React.ChangeEvent<HTMLInputElement>, controller: CanvasController) => {
-	const fileInput = event.target
-	const file = fileInput.files?.[0]
-
-	if (file) {
-		const reader = new FileReader()
-		reader.onload = e => {
-			try {
-				const jsonString = e.target?.result as string
-				controller.loadCanvasFromJson(jsonString)
-			}
-			catch (error) {
-				alert(error)
-			}
-		}
-
-		reader.readAsText(file)
-	}
-}
-
-const handleSaveJson = (jsonData: string) => {
-	const blob = new Blob([jsonData], {type: 'application/json'})
-	const url = URL.createObjectURL(blob)
-	const a = document.createElement('a')
-	a.href = url
-	a.download = 'Presentation.json'
-	a.click()
-	URL.revokeObjectURL(url)
-	alert('Canvas data saved successfully')
-}
-
-const JsonBlock: React.FC<{
-	controller: CanvasController,
-	model: ICanvasReadModel,
-	onLoad: () => void
-}> = ({controller, model, onLoad}) => {
-	const buttonStyle: CSSProperties = {
-		display: 'flex',
-		justifyContent: 'center',
-		alignItems: 'center',
-		borderRadius: 5,
-		border: 'solid 2px #413737'
-	}
-
-	return(
-		<div style={{display: 'flex', gap: '10px', padding: '10px'}}>
-			<button onClick={() => handleSaveJson(model.serializeCanvasToJson())} style={buttonStyle}>{'Save'}</button>
-			<input
-				id={'inputJson'}
-				type={'file'}
-				accept={'.json'}
-				onChange={e => {
-					handleLoadJson(e, controller)
-					onLoad()
-				}}
-				style={{display: 'none'}}
-			/>
-			<button style={buttonStyle}>
-				<label htmlFor={'inputJson'}>
-					{'Load'}
-				</label>
-			</button>
-		</div>
-	)
-}
 
 const HistoryBlock: React.FC<{
 	controller: CanvasController,

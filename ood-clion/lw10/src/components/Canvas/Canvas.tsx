@@ -40,7 +40,6 @@ class Canvas extends Component<CanvasProps, CanvasState> {
 		}
 	}
 
-
 	renderShape(shapeId: string, shape: IShape, isSelected: boolean): ReactElement {
 		const position = shape.getPosition()
 		const size = shape.getSize()
