@@ -106,17 +106,27 @@ class Canvas extends Component<CanvasProps, CanvasState> {
 		const canvasSize = this.model.getCanvasSize()
 
 		return (
-			<div
-				id={this.state.canvasId}
-				style={{
-					position: 'relative',
-					width: canvasSize.width,
-					height: canvasSize.height,
-					backgroundColor: '#eee9db',
-					overflow: 'hidden',
-				}}
-			>
-				{this.state.shapes}
+			<div style={{
+				width: 1488,
+				height: canvasSize.height,
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
+			}}>
+				<div
+					id={this.state.canvasId}
+					style={{
+						position: 'relative',
+						width: canvasSize.width,
+						height: canvasSize.height,
+						backgroundColor: '#eee9db',
+						overflow: 'hidden',
+						boxSizing: 'border-box',
+						border: 'solid 5px #000000'
+					}}
+				>
+					{this.state.shapes}
+				</div>
 			</div>
 		)
 	}

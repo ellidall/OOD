@@ -31,11 +31,24 @@ class Toolbar extends Component<ToolbarProps> {
 
 	override render() {
 		return (
-			<div style={{display: 'flex', gap: 10, height: 60, width: 1488, background: '#e0e0e0', paddingInline: 50, boxSizing: 'border-box'}}>
+			<div style={{
+				display: 'flex',
+				gap: 10,
+				height: 60,
+				width: 1488,
+				background: '#c39ee8',
+				boxSizing: 'border-box',
+				alignItems: 'center',
+				justifyContent: 'center'
+			}}>
+				<JsonBlock
+					controller={this.controller}
+					model={this.canvasModel}
+					onLoad={() => this.props.setSelectedShapeId(undefined)}
+				/>
 				<CreateArtObjectBlock controller={this.controller} />
-				<JsonBlock controller={this.controller} model={this.canvasModel} onLoad={() => this.props.setSelectedShapeId(undefined)}/>
-				<HistoryBlock controller={this.controller}/>
-				<ShapeControlBlock
+				<HistoryBlock
+					controller={this.controller}
 					selectedShapeId={this.props.selectedShapeId}
 					handleDeleteShape={this.props.handleDeleteShape}
 				/>
@@ -82,7 +95,7 @@ const CreateArtObjectBlock = React.memo(({controller}: {controller: CanvasContro
 	}
 
 	return (
-		<div style={{display: 'flex', gap: '10px', padding: '10px', marginRight: 20}}>
+		<div style={{display: 'flex', gap: '10px', padding: '10px'}}>
 			<button onClick={() => controller.addArtObject('rectangle')}
 					style={buttonStyle}>{renderIcon('rectangle')}</button>
 			<button onClick={() => controller.addArtObject('triangle')}
@@ -128,7 +141,7 @@ const handleSaveJson = (jsonData: string) => {
 	const url = URL.createObjectURL(blob)
 	const a = document.createElement('a')
 	a.href = url
-	a.download = 'CanvasData.json'
+	a.download = 'Presentation.json'
 	a.click()
 	URL.revokeObjectURL(url)
 	alert('Canvas data saved successfully')
@@ -138,64 +151,72 @@ const JsonBlock: React.FC<{
 	controller: CanvasController,
 	model: ICanvasReadModel,
 	onLoad: () => void
-}> = ({controller, model, onLoad}) => (
-	<div style={{display: 'flex', gap: '10px', padding: '10px'}}>
-		<button onClick={() => {
-			handleSaveJson(model.serializeCanvasToJson())
-		}}>
-			{'Save JSON'}
-		</button>
-		<input
-			id="inputJson"
-			type="file"
-			accept=".json"
-			onChange={e => {
-				handleLoadJson(e, controller)
-				onLoad()
-			}}
-			style={{display: 'none'}}
-		/>
-		<button>
-			<label htmlFor="inputJson">
-				{'Load JSON'}
-			</label>
-		</button>
-	</div>
-)
-
-const ShapeControlBlock: React.FC<{
-	selectedShapeId?: string,
-	handleDeleteShape: (shapeId: string) => void,
-}> = ({selectedShapeId, handleDeleteShape}) => {
-	if (!selectedShapeId) {
-		return null
+}> = ({controller, model, onLoad}) => {
+	const buttonStyle: CSSProperties = {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 5,
+		border: 'solid 2px #413737'
 	}
 
-	return (
+	return(
 		<div style={{display: 'flex', gap: '10px', padding: '10px'}}>
-			<button onClick={() => handleDeleteShape(selectedShapeId)}>
-				{'Delete shape'}
+			<button onClick={() => handleSaveJson(model.serializeCanvasToJson())} style={buttonStyle}>{'Save'}</button>
+			<input
+				id={'inputJson'}
+				type={'file'}
+				accept={'.json'}
+				onChange={e => {
+					handleLoadJson(e, controller)
+					onLoad()
+				}}
+				style={{display: 'none'}}
+			/>
+			<button style={buttonStyle}>
+				<label htmlFor={'inputJson'}>
+					{'Load'}
+				</label>
 			</button>
 		</div>
 	)
 }
 
-const HistoryBlock: React.FC<{controller: CanvasController}> = ({controller}) => (
-	<div style={{display: 'flex', gap: '10px', padding: '10px'}}>
-		<button
-			disabled={!controller.canUndo()}
-			onClick={() => controller.undo()}
-		>
-			{'Undo'}
-		</button>
-		<button
-			disabled={!controller.canRedo()}
-			onClick={() => controller.redo()}
-		>
-			{'Redo'}
-		</button>
-	</div>
-)
+const HistoryBlock: React.FC<{
+	controller: CanvasController,
+	selectedShapeId?: string,
+	handleDeleteShape: (shapeId: string) => void,
+}> = ({controller, selectedShapeId, handleDeleteShape}) => {
+	const buttonStyle: CSSProperties = {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 5,
+		border: 'solid 2px #413737'
+	}
+
+	return(
+		<div style={{display: 'flex', gap: '10px', padding: '10px'}}>
+			<button
+				disabled={!controller.canUndo()}
+				onClick={() => controller.undo()}
+				style={buttonStyle}
+			>
+				{'Undo'}
+			</button>
+			<button
+				disabled={!controller.canRedo()}
+				onClick={() => controller.redo()}
+				style={buttonStyle}
+			>
+				{'Redo'}
+			</button>
+			<button disabled={!selectedShapeId} onClick={() => handleDeleteShape(selectedShapeId!)} style={buttonStyle}>
+				{'Delete shape'}
+			</button>
+		</div>
+	)
+}
 
 export {
 	Toolbar,

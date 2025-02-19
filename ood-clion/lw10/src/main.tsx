@@ -10,7 +10,8 @@ const model = new CanvasModel()
 if (root) {
 	createRoot(root).render(
 		<div>
-			<div style={{display: 'flex', gap: 10}}>
+			<div style={{display: 'flex', flexDirection: 'column', overflowX: 'hidden'}}>
+				<App model={model} canvasController={new CanvasController(model)} shapeController={new ShapeController(model)}/>
 				<App model={model} canvasController={new CanvasController(model)} shapeController={new ShapeController(model)}/>
 			</div>
 		</div>,
