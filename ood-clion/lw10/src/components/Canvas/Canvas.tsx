@@ -112,7 +112,7 @@ class Canvas extends Component<CanvasProps, CanvasState> {
 					position: 'relative',
 					width: canvasSize.width,
 					height: canvasSize.height,
-					backgroundColor: '#f0f0f0',
+					backgroundColor: '#eee9db',
 					overflow: 'hidden',
 				}}
 			>

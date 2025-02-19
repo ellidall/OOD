@@ -1,7 +1,7 @@
 import {Component} from 'react'
 
 class RectangleShape extends Component {
-	private color = 'green'
+	private color = '#7aafd2'
 
 	override render() {
 		return (

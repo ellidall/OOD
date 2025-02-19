@@ -28,6 +28,8 @@ class InteractiveShape extends Component<InteractiveShapeProps> {
 	private initialX = 0
 	private initialY = 0
 
+	private resizeShapeColor = '#b91def'
+
 	private shapeRef = createRef<HTMLDivElement>()
 
 	handleMouseDown = (e: React.MouseEvent) => {
@@ -111,7 +113,7 @@ class InteractiveShape extends Component<InteractiveShapeProps> {
 						left: -5,
 						width: 10,
 						height: 10,
-						backgroundColor: 'red',
+						backgroundColor: this.resizeShapeColor,
 						cursor: 'nw-resize',
 					}}
 					onMouseDown={e => this.handleResizeMouseDown(e, 'top-left')}
@@ -123,7 +125,7 @@ class InteractiveShape extends Component<InteractiveShapeProps> {
 						right: -5,
 						width: 10,
 						height: 10,
-						backgroundColor: 'red',
+						backgroundColor: this.resizeShapeColor,
 						cursor: 'ne-resize',
 					}}
 					onMouseDown={e => this.handleResizeMouseDown(e, 'top-right')}
@@ -135,7 +137,7 @@ class InteractiveShape extends Component<InteractiveShapeProps> {
 						left: -5,
 						width: 10,
 						height: 10,
-						backgroundColor: 'red',
+						backgroundColor: this.resizeShapeColor,
 						cursor: 'sw-resize',
 					}}
 					onMouseDown={e => this.handleResizeMouseDown(e, 'bottom-left')}
@@ -147,7 +149,7 @@ class InteractiveShape extends Component<InteractiveShapeProps> {
 						right: -5,
 						width: 10,
 						height: 10,
-						backgroundColor: 'red',
+						backgroundColor: this.resizeShapeColor,
 						cursor: 'se-resize',
 					}}
 					onMouseDown={e => this.handleResizeMouseDown(e, 'bottom-right')}
@@ -176,7 +178,7 @@ class InteractiveShape extends Component<InteractiveShapeProps> {
 					left: shapePosition.x,
 					width: shapeSize.width,
 					height: shapeSize.height,
-					outline: isSelected ? '2px solid blue' : 'none',
+					outline: isSelected ? '2px solid #000000' : 'none',
 					cursor: isSelected ? 'move' : 'default',
 				}}
 				onMouseDown={this.handleMouseDown}

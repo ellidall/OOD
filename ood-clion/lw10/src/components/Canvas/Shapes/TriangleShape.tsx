@@ -1,7 +1,7 @@
 import {Component} from 'react'
 
 class TriangleShape extends Component {
-	private color = 'red'
+	private color = '#6ac45c'
 
 	override render() {
 		return (

@@ -1,7 +1,7 @@
 import {Component} from 'react'
 
 class EllipseShape extends Component {
-	private color = 'blue'
+	private color = '#d75050'
 
 	override render() {
 		return (

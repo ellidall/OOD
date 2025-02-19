@@ -1,4 +1,4 @@
-import React, {ChangeEvent, Component} from 'react'
+import React, {ChangeEvent, Component, CSSProperties} from 'react'
 import {CanvasController} from '../../controllers/CanvasController'
 import {ICanvasReadModel} from '../../models/CanvasModel'
 import {ArtObjectType} from '../../types/shapes'
@@ -31,9 +31,8 @@ class Toolbar extends Component<ToolbarProps> {
 
 	override render() {
 		return (
-			<div style={{display: 'flex', gap: '10px'}}>
+			<div style={{display: 'flex', gap: 10, height: 60, width: 1488, background: '#e0e0e0', paddingInline: 50, boxSizing: 'border-box'}}>
 				<CreateArtObjectBlock controller={this.controller} />
-				<ImageImportBlock controller={this.controller} />
 				<JsonBlock controller={this.controller} model={this.canvasModel} onLoad={() => this.props.setSelectedShapeId(undefined)}/>
 				<HistoryBlock controller={this.controller}/>
 				<ShapeControlBlock
@@ -46,33 +45,16 @@ class Toolbar extends Component<ToolbarProps> {
 }
 
 const CreateArtObjectBlock = React.memo(({controller}: {controller: CanvasController}) => {
-	const onCreateArt = (type: ArtObjectType) => {
-		controller.addArtObject(type)
+	const buttonStyle: CSSProperties = {
+		width: 40,
+		height: 40,
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 5,
+		border: 'solid 2px #413737'
 	}
 
-	return (
-		<div style={{display: 'flex', gap: '10px', padding: '10px', background: '#e0e0e0', borderRadius: '5px'}}>
-			<button onClick={() => onCreateArt('rectangle')}>{renderIcon('rectangle')}{' Rectangle'}</button>
-			<button onClick={() => onCreateArt('triangle')}>{renderIcon('triangle')}{' Triangle'}</button>
-			<button onClick={() => onCreateArt('ellipse')}>{renderIcon('ellipse')}{' Ellipse'}</button>
-		</div>
-	)
-})
-
-const renderIcon = (type: ArtObjectType): JSX.Element => {
-	switch (type) {
-		case 'rectangle':
-			return <div style={{width: 16, height: 16}}><RectangleShape /></div>
-		case 'triangle':
-			return <div style={{width: 16, height: 16}}><TriangleShape /></div>
-		case 'ellipse':
-			return <div style={{width: 16, height: 16}}><EllipseShape /></div>
-		default:
-			return <></>
-	}
-}
-
-const ImageImportBlock = React.memo(({controller}: {controller: CanvasController}) => {
 	const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0]
 		if (!file) {
@@ -86,19 +68,36 @@ const ImageImportBlock = React.memo(({controller}: {controller: CanvasController
 		reader.readAsDataURL(file)
 	}
 
+	const renderIcon = (type: ArtObjectType): JSX.Element => {
+		switch (type) {
+			case 'rectangle':
+				return <div style={{width: 16, height: 16}}><RectangleShape/></div>
+			case 'triangle':
+				return <div style={{width: 16, height: 16}}><TriangleShape /></div>
+			case 'ellipse':
+				return <div style={{width: 16, height: 16}}><EllipseShape /></div>
+			default:
+				return <></>
+		}
+	}
+
 	return (
-		<div style={{display: 'flex', padding: '10px', background: '#e0e0e0', borderRadius: '5px'}}>
+		<div style={{display: 'flex', gap: '10px', padding: '10px', marginRight: 20}}>
+			<button onClick={() => controller.addArtObject('rectangle')}
+					style={buttonStyle}>{renderIcon('rectangle')}</button>
+			<button onClick={() => controller.addArtObject('triangle')}
+					style={buttonStyle}>{renderIcon('triangle')}</button>
+			<button onClick={() => controller.addArtObject('ellipse')}
+					style={buttonStyle}>{renderIcon('ellipse')}</button>
 			<input
-				id="input-image-from-pc"
+				id="inputImage"
 				type="file"
 				accept=".jpeg, .jpg, .png"
 				onChange={handleImageUpload}
 				style={{display: 'none'}}
 			/>
-			<button>
-				<label htmlFor="input-image-from-pc">
-					{'Upload an image'}
-				</label>
+			<button style={buttonStyle}>
+				<label htmlFor="inputImage">{'Img'}</label>
 			</button>
 		</div>
 	)
@@ -132,18 +131,22 @@ const handleSaveJson = (jsonData: string) => {
 	a.download = 'CanvasData.json'
 	a.click()
 	URL.revokeObjectURL(url)
-	alert('Canvas data saved successfully.')
+	alert('Canvas data saved successfully')
 }
 
-const JsonBlock = React.memo(({controller, model, onLoad}: {controller: CanvasController, model: ICanvasReadModel, onLoad: () => void}) => (
-	<div style={{display: 'flex', gap: '10px', padding: '10px', background: '#e0e0e0', borderRadius: '5px'}}>
+const JsonBlock: React.FC<{
+	controller: CanvasController,
+	model: ICanvasReadModel,
+	onLoad: () => void
+}> = ({controller, model, onLoad}) => (
+	<div style={{display: 'flex', gap: '10px', padding: '10px'}}>
 		<button onClick={() => {
 			handleSaveJson(model.serializeCanvasToJson())
 		}}>
 			{'Save JSON'}
 		</button>
 		<input
-			id="input-json-from-pc"
+			id="inputJson"
 			type="file"
 			accept=".json"
 			onChange={e => {
@@ -153,32 +156,32 @@ const JsonBlock = React.memo(({controller, model, onLoad}: {controller: CanvasCo
 			style={{display: 'none'}}
 		/>
 		<button>
-			<label htmlFor="input-json-from-pc">
+			<label htmlFor="inputJson">
 				{'Load JSON'}
 			</label>
 		</button>
 	</div>
-))
+)
 
-const ShapeControlBlock = React.memo(({selectedShapeId, handleDeleteShape}: {
+const ShapeControlBlock: React.FC<{
 	selectedShapeId?: string,
 	handleDeleteShape: (shapeId: string) => void,
-}) => {
+}> = ({selectedShapeId, handleDeleteShape}) => {
 	if (!selectedShapeId) {
 		return null
 	}
 
 	return (
-		<div style={{display: 'flex', gap: '10px', padding: '10px', background: '#e0e0e0', borderRadius: '5px'}}>
+		<div style={{display: 'flex', gap: '10px', padding: '10px'}}>
 			<button onClick={() => handleDeleteShape(selectedShapeId)}>
 				{'Delete shape'}
 			</button>
 		</div>
 	)
-})
+}
 
-const HistoryBlock = ({controller}: {controller: CanvasController}) => (
-	<div style={{display: 'flex', gap: '10px', padding: '10px', background: '#e0e0e0', borderRadius: '5px'}}>
+const HistoryBlock: React.FC<{controller: CanvasController}> = ({controller}) => (
+	<div style={{display: 'flex', gap: '10px', padding: '10px'}}>
 		<button
 			disabled={!controller.canUndo()}
 			onClick={() => controller.undo()}
@@ -194,8 +197,6 @@ const HistoryBlock = ({controller}: {controller: CanvasController}) => (
 	</div>
 )
 
-const MemoizedToolbar = React.memo(Toolbar)
-
 export {
-	MemoizedToolbar as Toolbar,
+	Toolbar,
 }

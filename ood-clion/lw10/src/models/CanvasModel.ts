@@ -35,7 +35,7 @@ type ICanvasModel = ICanvasReadModel & {
 }
 
 class CanvasModel implements ICanvasModel {
-	private canvasSize: ShapeSize = {width: 800, height: 600}
+	private canvasSize: ShapeSize = {width: 1488, height: 680}
 	private shapes: Map<string, BaseShape> = new Map()
 	private shapeChangeObservers: ShapeChangeObserver[] = []
 	private history: History = new History()
