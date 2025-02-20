@@ -7,11 +7,10 @@ import {RectangleShape} from '../Canvas/Shapes/RectangleShape'
 import {TriangleShape} from '../Canvas/Shapes/TriangleShape'
 
 type ToolbarProps = {
-	controller: CanvasController,
-	canvasModel: ICanvasReadModel,
+	canvasController: CanvasController,
+	model: ICanvasReadModel,
 	selectedShapeId?: string,
 	setSelectedShapeId: (shapeId?: string) => void,
-	handleDeleteShape: (shapeId: string) => void,
 }
 
 class Toolbar extends Component<ToolbarProps> {
@@ -20,8 +19,8 @@ class Toolbar extends Component<ToolbarProps> {
 
 	constructor(props: ToolbarProps) {
 		super(props)
-		this.canvasModel = this.props.canvasModel
-		this.controller = props.controller
+		this.canvasModel = this.props.model
+		this.controller = props.canvasController
 		this.controller.addObserver(() => this.observer())
 	}
 
@@ -48,20 +47,17 @@ class Toolbar extends Component<ToolbarProps> {
 				/>
 				<CreateBlock controller={this.controller} />
 				<HistoryBlock
-					controller={this.controller}
+					canvasController={this.controller}
 					selectedShapeId={this.props.selectedShapeId}
-					handleDeleteShape={this.props.handleDeleteShape}
 				/>
 			</div>
 		)
 	}
 }
 
-const JsonBlock: React.FC<{
-	controller: CanvasController,
-	model: ICanvasReadModel,
-	onLoad: () => void
-}> = ({controller, model, onLoad}) => {
+const JsonBlock: React.FC<{ controller: CanvasController, model: ICanvasReadModel, onLoad: () => void }> = (
+	{controller, model, onLoad}
+) => {
 	const buttonStyle: CSSProperties = {
 		display: 'flex',
 		justifyContent: 'center',
@@ -85,20 +81,22 @@ const JsonBlock: React.FC<{
 		const fileInput = event.target
 		const file = fileInput.files?.[0]
 
-		if (file) {
-			const reader = new FileReader()
-			reader.onload = e => {
-				try {
-					const jsonString = e.target?.result as string
-					controller.loadCanvasFromJson(jsonString)
-				}
-				catch (error) {
-					alert(error)
-				}
-			}
-
-			reader.readAsText(file)
+		if (!file) {
+			return
 		}
+
+		const reader = new FileReader()
+		reader.onload = e => {
+			try {
+				const jsonString = e.target?.result as string
+				controller.loadCanvasFromJson(jsonString)
+			}
+			catch (error) {
+				alert(error)
+			}
+		}
+		reader.readAsText(file)
+
 		onLoad()
 	}
 
@@ -180,11 +178,9 @@ const CreateBlock = React.memo(({controller}: {controller: CanvasController}) =>
 	)
 })
 
-const HistoryBlock: React.FC<{
-	controller: CanvasController,
-	selectedShapeId?: string,
-	handleDeleteShape: (shapeId: string) => void,
-}> = ({controller, selectedShapeId, handleDeleteShape}) => {
+const HistoryBlock: React.FC<{ canvasController: CanvasController, selectedShapeId?: string}> =
+	({canvasController, selectedShapeId}
+) => {
 	const buttonStyle: CSSProperties = {
 		display: 'flex',
 		justifyContent: 'center',
@@ -196,20 +192,20 @@ const HistoryBlock: React.FC<{
 	return(
 		<div style={{display: 'flex', gap: '10px', padding: '10px'}}>
 			<button
-				disabled={!controller.canUndo()}
-				onClick={() => controller.undo()}
+				disabled={!canvasController.canUndo()}
+				onClick={() => canvasController.undo()}
 				style={buttonStyle}
 			>
 				{'Undo'}
 			</button>
 			<button
-				disabled={!controller.canRedo()}
-				onClick={() => controller.redo()}
+				disabled={!canvasController.canRedo()}
+				onClick={() => canvasController.redo()}
 				style={buttonStyle}
 			>
 				{'Redo'}
 			</button>
-			<button disabled={!selectedShapeId} onClick={() => handleDeleteShape(selectedShapeId!)} style={buttonStyle}>
+			<button disabled={!selectedShapeId} onClick={() => canvasController.removeShape(selectedShapeId!)} style={buttonStyle}>
 				{'Delete shape'}
 			</button>
 		</div>

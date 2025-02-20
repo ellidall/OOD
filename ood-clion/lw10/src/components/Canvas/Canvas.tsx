@@ -16,7 +16,6 @@ type CanvasProps = {
 	shapeController: ShapeController,
 	selectedShapeId?: string,
 	handleSelectShape: (shapeId?: string) => void,
-	handleDeleteShape: (shapeId: string) => void,
 }
 
 type CanvasState = {
@@ -97,7 +96,7 @@ class Canvas extends Component<CanvasProps, CanvasState> {
 
 	handleKeyDown = (event: KeyboardEvent) => {
 		if (event.key === 'Delete' && this.props.selectedShapeId) {
-			this.props.handleDeleteShape(this.props.selectedShapeId)
+			this.props.canvasController.removeShape(this.props.selectedShapeId)
 		}
 	}
 

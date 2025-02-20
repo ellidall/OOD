@@ -121,12 +121,12 @@ class CanvasModel implements ICanvasModel {
 		return JSON.stringify(canvasData)
 	}
 
-	addObserver(onShapeChange: ShapeChangeObserver) {
-		this.shapeChangeObservers.push(onShapeChange)
+	addObserver(observer: ShapeChangeObserver) {
+		this.shapeChangeObservers.push(observer)
 	}
 
-	removeObserver(onShapeChange: ShapeChangeObserver) {
-		const index = this.shapeChangeObservers.indexOf(onShapeChange)
+	removeObserver(observer: ShapeChangeObserver) {
+		const index = this.shapeChangeObservers.indexOf(observer)
 		if (index !== -1) {
 			this.shapeChangeObservers.splice(index, 1)
 		}

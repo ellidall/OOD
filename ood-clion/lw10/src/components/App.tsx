@@ -32,20 +32,15 @@ class App extends Component<AppProps, AppState> {
 		this.setState({selectedShapeId: shapeId})
 	}
 
-	handleDeleteShape = (shapeId: string) => {
-		this.state.canvasController.removeShape(shapeId)
-	}
-
 	override render() {
 		return (
 			<div style={{display: 'flex'}}>
 				<div style={{margin: '0 auto'}}>
 					<Toolbar
-						canvasModel={this.state.model}
-						controller={this.state.canvasController}
+						model={this.state.model}
+						canvasController={this.state.canvasController}
 						selectedShapeId={this.state.selectedShapeId}
 						setSelectedShapeId={this.handleSelectShape}
-						handleDeleteShape={this.handleDeleteShape}
 					/>
 					<Canvas
 						model={this.state.model}
@@ -53,7 +48,6 @@ class App extends Component<AppProps, AppState> {
 						shapeController={this.state.shapeController}
 						handleSelectShape={this.handleSelectShape}
 						selectedShapeId={this.state.selectedShapeId}
-						handleDeleteShape={this.handleDeleteShape}
 					/>
 				</div>
 			</div>

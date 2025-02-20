@@ -9,7 +9,6 @@ type ShapePosition = {
 	y: number,
 }
 
-
 export type {
 	ArtObjectType,
 	ShapeType,
