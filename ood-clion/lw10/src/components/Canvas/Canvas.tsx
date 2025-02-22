@@ -34,12 +34,12 @@ class Canvas extends Component<CanvasProps, CanvasState> {
 		this.canvasController = props.canvasController
 		this.shapeController = this.props.shapeController
 		this.state = {
-			shapes: this.renderShapes(),
+			shapes: this.getShapeComponents(),
 			canvasId: (new Date()).getTime().toString(),
 		}
 	}
 
-	renderShape(shapeId: string, shape: IShape, isSelected: boolean): ReactElement {
+	getShapeComponent(shapeId: string, shape: IShape, isSelected: boolean): ReactElement {
 		const position = shape.getPosition()
 		const size = shape.getSize()
 
@@ -70,8 +70,8 @@ class Canvas extends Component<CanvasProps, CanvasState> {
 					this.setState(prevState => ({
 						shapes: prevState.shapes.map(prevShape =>
 							(prevShape.key === shapeId
-								? this.renderShape(shapeId, this.model.getShape(shapeId), selected)
-								: this.renderShape(prevShape.key ?? '', this.model.getShape(prevShape.key ?? ''), false)),
+								? this.getShapeComponent(shapeId, this.model.getShape(shapeId), selected)
+								: this.getShapeComponent(prevShape.key ?? '', this.model.getShape(prevShape.key ?? ''), false)),
 						),
 					}))
 				}}
@@ -86,10 +86,10 @@ class Canvas extends Component<CanvasProps, CanvasState> {
 		)
 	}
 
-	renderShapes = () => {
+	getShapeComponents = () => {
 		const shapesComponents: ReactElement[] = []
 		this.model.getShapeIdToShapeMap().forEach((shape, shapeId) => {
-			shapesComponents.push(this.renderShape(shapeId, shape, this.props.selectedShapeId === shapeId))
+			shapesComponents.push(this.getShapeComponent(shapeId, shape, this.props.selectedShapeId === shapeId))
 		})
 		return shapesComponents
 	}
@@ -133,7 +133,7 @@ class Canvas extends Component<CanvasProps, CanvasState> {
 		this.canvasController.addObserver((shapeId: string, event: ChangeEvent) => {
 			switch (event) {
 				case 'create':
-					this.setState(() => ({shapes: this.renderShapes()}))
+					this.setState(() => ({shapes: this.getShapeComponents()}))
 					break
 				case 'delete':
 					this.setState(prevState => ({
@@ -143,7 +143,7 @@ class Canvas extends Component<CanvasProps, CanvasState> {
 				case 'update':
 					this.setState(prevState => ({
 						shapes: prevState.shapes.map(shape =>
-							(shape.key === shapeId ? this.renderShape(shapeId, this.model.getShape(shapeId), this.props.selectedShapeId === shapeId) : shape),
+							(shape.key === shapeId ? this.getShapeComponent(shapeId, this.model.getShape(shapeId), this.props.selectedShapeId === shapeId) : shape),
 						),
 					}))
 					break

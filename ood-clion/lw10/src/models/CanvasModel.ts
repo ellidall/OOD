@@ -225,8 +225,8 @@ class CanvasModel implements ICanvasModel {
 	}
 
 	private _notifyObservers(shapeId: string, event: ChangeEvent) {
-		for (const observer of this.shapeChangeObservers) {
-			observer(shapeId, event)
+		for (const onChange of this.shapeChangeObservers) {
+			onChange(shapeId, event)
 		}
 	}
 

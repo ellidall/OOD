@@ -14,18 +14,14 @@ type ToolbarProps = {
 }
 
 class Toolbar extends Component<ToolbarProps> {
-	private readonly controller: CanvasController
+	private readonly canvasController: CanvasController
 	private readonly canvasModel: ICanvasReadModel
 
 	constructor(props: ToolbarProps) {
 		super(props)
 		this.canvasModel = this.props.model
-		this.controller = props.canvasController
-		this.controller.addObserver(() => this.observer())
-	}
-
-	observer() {
-		this.forceUpdate()
+		this.canvasController = props.canvasController
+		this.canvasController.addObserver(() => this.forceUpdate())
 	}
 
 	override render() {
@@ -41,14 +37,15 @@ class Toolbar extends Component<ToolbarProps> {
 				justifyContent: 'center'
 			}}>
 				<JsonBlock
-					controller={this.controller}
+					controller={this.canvasController}
 					model={this.canvasModel}
 					onLoad={() => this.props.setSelectedShapeId(undefined)}
 				/>
-				<CreateBlock controller={this.controller} />
+				<CreateBlock controller={this.canvasController} />
 				<HistoryBlock
-					canvasController={this.controller}
+					canvasController={this.canvasController}
 					selectedShapeId={this.props.selectedShapeId}
+					setSelectedShapeId={this.props.setSelectedShapeId}
 				/>
 			</div>
 		)
@@ -63,7 +60,8 @@ const JsonBlock: React.FC<{ controller: CanvasController, model: ICanvasReadMode
 		justifyContent: 'center',
 		alignItems: 'center',
 		borderRadius: 5,
-		border: 'solid 2px #413737'
+		border: 'solid 2px #413737',
+		userSelect: 'none',
 	}
 
 	const handleSaveJson = (jsonData: string) => {
@@ -119,7 +117,7 @@ const JsonBlock: React.FC<{ controller: CanvasController, model: ICanvasReadMode
 	)
 }
 
-const CreateBlock = React.memo(({controller}: {controller: CanvasController}) => {
+const CreateBlock: React.FC<{controller: CanvasController}> = ({controller})=> {
 	const buttonStyle: CSSProperties = {
 		width: 40,
 		height: 40,
@@ -127,7 +125,8 @@ const CreateBlock = React.memo(({controller}: {controller: CanvasController}) =>
 		justifyContent: 'center',
 		alignItems: 'center',
 		borderRadius: 5,
-		border: 'solid 2px #413737'
+		border: 'solid 2px #413737',
+		userSelect: 'none',
 	}
 
 	const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -143,7 +142,7 @@ const CreateBlock = React.memo(({controller}: {controller: CanvasController}) =>
 		reader.readAsDataURL(file)
 	}
 
-	const renderIcon = (type: ArtObjectType): JSX.Element => {
+	const renderIcon = (type: ArtObjectType) => {
 		switch (type) {
 			case 'rectangle':
 				return <div style={{width: 16, height: 16}}><RectangleShape/></div>
@@ -165,28 +164,29 @@ const CreateBlock = React.memo(({controller}: {controller: CanvasController}) =>
 			<button onClick={() => controller.addArtObject('ellipse')}
 					style={buttonStyle}>{renderIcon('ellipse')}</button>
 			<input
-				id="inputImage"
-				type="file"
-				accept=".jpeg, .jpg, .png"
+				id={'inputImage'}
+				type={'file'}
+				accept={'.jpeg, .jpg, .png'}
 				onChange={handleImageUpload}
 				style={{display: 'none'}}
 			/>
 			<button style={buttonStyle}>
-				<label htmlFor="inputImage">{'Img'}</label>
+				<label htmlFor={'inputImage'}>{'Img'}</label>
 			</button>
 		</div>
 	)
-})
+}
 
-const HistoryBlock: React.FC<{ canvasController: CanvasController, selectedShapeId?: string}> =
-	({canvasController, selectedShapeId}
+const HistoryBlock: React.FC<{ canvasController: CanvasController, selectedShapeId?: string, setSelectedShapeId: (id?: string) => void}> =
+	({canvasController, selectedShapeId, setSelectedShapeId}
 ) => {
 	const buttonStyle: CSSProperties = {
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
 		borderRadius: 5,
-		border: 'solid 2px #413737'
+		border: 'solid 2px #413737',
+		userSelect: 'none',
 	}
 
 	return(
@@ -205,7 +205,14 @@ const HistoryBlock: React.FC<{ canvasController: CanvasController, selectedShape
 			>
 				{'Redo'}
 			</button>
-			<button disabled={!selectedShapeId} onClick={() => canvasController.removeShape(selectedShapeId!)} style={buttonStyle}>
+			<button
+				disabled={!selectedShapeId}
+				onClick={() => {
+					canvasController.removeShape(selectedShapeId!)
+					setSelectedShapeId(undefined)
+				}}
+				style={buttonStyle}
+			>
 				{'Delete shape'}
 			</button>
 		</div>

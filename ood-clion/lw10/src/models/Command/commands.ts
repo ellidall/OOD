@@ -84,12 +84,6 @@ class InsertImageObjectCommand extends AbstractCommand {
 	}
 
 	doExecute() {
-		if (this.insertedShapeId) {
-			this.data = ImageLocalStorage.getImageData(this.insertedShapeId)
-			if (this.data) {
-				ImageLocalStorage.removeImage(this.insertedShapeId)
-			}
-		}
 		this.insertedShapeId = this.canvasModel._addShape(ShapeFactory.constructShape('image', this.data), this.insertedShapeId)
 		ImageLocalStorage.addImage(this.insertedShapeId, this.data ?? '')
 		this.shouldDelete = false

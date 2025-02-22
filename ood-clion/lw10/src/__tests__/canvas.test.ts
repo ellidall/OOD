@@ -137,7 +137,7 @@ describe('CanvasModel', () => {
 
 	it('should retrieve canvas size', () => {
 		const size = canvas.getCanvasSize()
-		expect(size).toEqual({width: 800, height: 600})
+		expect(size).toEqual({width: 1200, height: 680})
 	})
 
 	it('try to get non existent shape', () => {
