@@ -100,7 +100,7 @@ describe('CanvasModel', () => {
 
 		const revertedShape = canvas.getShape(shapeId ?? '')
 		expect(revertedShape.getSize()).toEqual({width: 100, height: 100})
-		expect(revertedShape.getPosition()).toEqual({x: 0, y: 0})
+		expect(revertedShape.getPosition()).toEqual({x: 300, y: 200})
 	})
 
 	it('should serialize and load canvas correctly', () => {

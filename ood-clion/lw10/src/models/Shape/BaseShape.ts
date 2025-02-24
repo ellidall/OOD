@@ -7,7 +7,7 @@ type IShape = {
 }
 
 abstract class BaseShape implements IShape {
-	private position: ShapePosition = {x: 0, y: 0}
+	private position: ShapePosition = {x: 300, y: 200}
 	private size: ShapeSize
 
 	constructor(size: ShapeSize) {
